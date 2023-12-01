@@ -46,5 +46,5 @@ Kelompok kami melakukan integrasi website dengan membentuk sebuah fungsi fetchin
 
 Untuk memulai aplikasi, dapat dilakukan command `git clone` pada terminal, kemudian `flutter pub get`, setelahnya lakukan `flutter run -d chrome --web-renderer html` untuk dapat melihat hasil aplikasi flutter pada chrome.
 
-
-
+## Berita Acara
+Dapat diakses melalui spreadsheet [berita acara](https://docs.google.com/spreadsheets/d/1ZFUkqwQGc-nZMWq-vbccy1NEYtcODBSn/edit#gid=842285077).
