@@ -19,7 +19,7 @@ class ItemPage extends StatefulWidget {
 class _ItemPageState extends State<ItemPage> {
   Future<List<Product>> fetchItem() async {
     // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
-    var url = Uri.parse('http://127.0.0.1:8000/json/');
+    var url = Uri.parse('http://127.0.0.1:8000/catalogue/get-books/');
     var response = await http.get(
       url,
       headers: {"Content-Type": "application/json"},
@@ -78,18 +78,18 @@ class _ItemPageState extends State<ItemPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "${snapshot.data![index].fields.name}",
+                            "${snapshot.data![index].fields.title}",
                             style: const TextStyle(
                               fontSize: 18.0,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           const SizedBox(height: 10),
-                          Text("${snapshot.data![index].fields.price}"),
-                          const SizedBox(height: 10),
-                          Text("${snapshot.data![index].fields.amount}"),
+                          Text("${snapshot.data![index].fields.author}"),
                           const SizedBox(height: 10),
                           Text("${snapshot.data![index].fields.description}"),
+                          const SizedBox(height: 10),
+                          Text("${snapshot.data![index].fields.numPages}"),
                         ],
                       ),
                     ),

@@ -165,7 +165,7 @@ class _AddItemState extends State<AddItemForm> {
                             jsonEncode(<String, String>{
                               'title': _title,
                               'author': _author,
-                              'descriptoin': _description,
+                              'description': _description,
                               'numPages': _pageCount.toString(),
                               // TODO: Sesuaikan field data sesuai dengan aplikasimu
                             }));
