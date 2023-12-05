@@ -19,6 +19,7 @@ class LoginApp extends StatelessWidget {
 		theme: ThemeData(
 		primarySwatch: Colors.lightGreen,
 		),
+    color: Colors.brown,
 		home: const LoginPage(),
 	);
 	}
@@ -48,8 +49,9 @@ class _LoginPageState extends State<LoginPage> {
 					begin: Alignment.topLeft,
 					end: Alignment.bottomRight,
 					colors: [
-				Color.fromARGB(255, 173, 185, 7),
-				Color.fromARGB(255, 78, 212, 227)
+				Color.fromARGB(255, 0, 51, 0),
+				Color.fromARGB(255, 79, 178, 149),
+          Color.fromARGB(255, 153, 202, 38)
 				])),
 			padding: const EdgeInsets.all(16.0),
 			child: Column(
