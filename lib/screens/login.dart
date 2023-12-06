@@ -41,7 +41,13 @@ class _LoginPageState extends State<LoginPage> {
 		final request = context.watch<CookieRequest>();
 		return Scaffold(
 		appBar: AppBar(
-			title: const Text('Login'),
+      backgroundColor: Color.fromARGB(255, 142, 168, 125),
+			title: const Text('Login',
+							textAlign: TextAlign.center,
+							style: TextStyle(
+								fontSize: 30,
+								color: Color.fromARGB(255, 239, 234, 234),
+								fontWeight: FontWeight.normal)),
 		),
 		body: Container(
 			decoration: const BoxDecoration(
@@ -49,9 +55,9 @@ class _LoginPageState extends State<LoginPage> {
 					begin: Alignment.topLeft,
 					end: Alignment.bottomRight,
 					colors: [
-				Color.fromARGB(255, 0, 51, 0),
-				Color.fromARGB(255, 79, 178, 149),
-          Color.fromARGB(255, 153, 202, 38)
+          Color.fromARGB(255, 0, 11, 0),
+          Color.fromARGB(255, 78, 117, 151),
+          Color.fromARGB(249, 238, 203, 156)
 				])),
 			padding: const EdgeInsets.all(16.0),
 			child: Column(
@@ -72,18 +78,20 @@ class _LoginPageState extends State<LoginPage> {
 				const SizedBox(height: 20.0),
 				TextField(
 					controller: _usernameController,
+          style: const TextStyle(color: const Color.fromARGB(255, 243, 231, 231)),
 					decoration: const InputDecoration(
 						labelText: 'Username',
 						labelStyle: TextStyle(color: Colors.white),
-						hintStyle: const TextStyle(color: Colors.white)),
+						hintStyle: TextStyle(color: Colors.white)),
 				),
 				const SizedBox(height: 12.0),
 				TextField(
 					controller: _passwordController,
+          style: const TextStyle(color: const Color.fromARGB(255, 243, 231, 231)),
 					decoration: const InputDecoration(
 						labelText: 'Password',
 						labelStyle: TextStyle(color: Colors.white),
-						hintStyle: const TextStyle(color: Colors.white)),
+						hintStyle: TextStyle(color: Colors.white)),
 						obscureText: true,
 				),
 				const SizedBox(height: 24.0),

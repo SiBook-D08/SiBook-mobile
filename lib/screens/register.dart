@@ -187,32 +187,32 @@ class _RegisterPageState extends State<RegisterPage> {
 								onPressed: () async {
 									if (_formKey.currentState!.validate()) {
 									// Submit to Django server and wait for response
-									final response = await request.postJson(
-										"http://127.0.0.1:8000/auth/register/",
-										convert.jsonEncode(<String, String>{
-											'username': username,
-											'password1': password1,
-											'password2': password2,
-										}));
-									if (response['status'] == 'success') {
-										ScaffoldMessenger.of(context)
-											.showSnackBar(const SnackBar(
-										content: Text(
-											"Account has been successfully registered!"),
-										));
-										Navigator.pushReplacement(
-										context,
-										MaterialPageRoute(
-											builder: (context) =>
-												const LoginPage()),
-										);
-									} else {
-										ScaffoldMessenger.of(context)
-											.showSnackBar(const SnackBar(
-										content: Text(
-											"An error occured, please try again."),
-										));
-									}
+                    final response = await request.postJson(
+                      "http://127.0.0.1:8000/auth/register/",
+                      convert.jsonEncode(<String, String>{
+                        'username': username,
+                        'password1': password1,
+                        'password2': password2,
+                      }));
+                    if (response['status'] == 'success') {
+                      ScaffoldMessenger.of(context)
+                        .showSnackBar(const SnackBar(
+                      content: Text(
+                        "Account has been successfully registered!"),
+                      ));
+                      Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                          const LoginPage()),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context)
+                        .showSnackBar(const SnackBar(
+                      content: Text(
+                        "An error occured, please try again."),
+                      ));
+                    }
 									}
 								},
 								child: const Text(
