@@ -47,8 +47,8 @@ class _RegisterPageState extends State<RegisterPage> {
 						SizedBox(
 							height: size.width * 0.1,
 						),
-						Stack(
-							children: const [
+						const Stack(
+							children: [
 							Center(
 								child: Text('Register Account',
 									textAlign: TextAlign.center,
@@ -108,11 +108,8 @@ class _RegisterPageState extends State<RegisterPage> {
 								decoration: InputDecoration(
 									hintText: "Masukkan Password",
 									labelText: "Password",
-									labelStyle:
-										const TextStyle(color: Colors.white),
-									icon: const Icon(
-									Icons.lock_outline,
-									),
+									labelStyle: const TextStyle(color: Colors.white),
+									icon: const Icon(Icons.lock_outline),
 									border: OutlineInputBorder(
 										borderRadius: BorderRadius.circular(5.0)),
 									hintStyle: const TextStyle(color: Colors.white),
@@ -146,8 +143,7 @@ class _RegisterPageState extends State<RegisterPage> {
 								decoration: InputDecoration(
 									hintText: "Konfirmasi Password",
 									labelText: "Konfirmasi Password",
-									labelStyle:
-										const TextStyle(color: Colors.white),
+									labelStyle: const TextStyle(color: Colors.white),
 									icon: const Icon(Icons.lock_outline),
 									border: OutlineInputBorder(
 										borderRadius: BorderRadius.circular(5.0)),

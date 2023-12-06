@@ -1,4 +1,4 @@
-import 'package:sibook_mobile/models/Item.dart';
+import 'package:sibook_mobile/models/product.dart';
 import 'package:sibook_mobile/screens/oneitem.dart';
 import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
@@ -23,7 +23,6 @@ class _ItemPageState extends State<ItemPage> {
   List<Product> allItems = []; // List to hold all items
   List<Product> filteredItems = []; // List to hold filtered items
   Future<List<Product>> fetchItem() async {
-    // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
     var url = Uri.parse('http://127.0.0.1:8000/catalogue/get-books/');
     var response = await http.get(
       url,
@@ -48,7 +47,7 @@ class _ItemPageState extends State<ItemPage> {
         appBar: AppBar(
           title: const Text('Item'),
         ),
-        drawer: const LeftDrawer(),
+        drawer: const LeftDrawer(title: 'catalogue'),
         body: Column(
           children: [
             Padding(
@@ -58,7 +57,7 @@ class _ItemPageState extends State<ItemPage> {
                 decoration: InputDecoration(
                   labelText: 'Search',
                   hintText: 'Search for items...',
-                  prefixIcon: Icon(Icons.search),
+                  prefixIcon: const Icon(Icons.search),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),

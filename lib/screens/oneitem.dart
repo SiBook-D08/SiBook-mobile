@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sibook_mobile/models/Item.dart'; // Assuming Item.dart contains Product class
-import 'package:sibook_mobile/models/Item.dart';
+import 'package:sibook_mobile/models/product.dart';
 import 'package:sibook_mobile/screens/item_list_page.dart';
 import 'package:sibook_mobile/screens/oneitem.dart';
 import 'package:flutter/material.dart';
