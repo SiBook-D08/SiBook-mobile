@@ -47,8 +47,11 @@ class LeftDrawer extends StatelessWidget {
             onTap: () {
               Navigator.pop(context);
               if (title != 'home') {
-                Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => MyHomePage()));
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => MyHomePage()),
+                  (route) => false,
+                );
               }
             },
           ),
@@ -60,8 +63,11 @@ class LeftDrawer extends StatelessWidget {
             onTap: () {
               Navigator.pop(context);
               if (title != 'donate') {
-                Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => const AddItemForm()));
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => const AddItemForm()),
+                  (route) => route.settings.name == 'home',
+                );
               }
             },
           ),
@@ -73,8 +79,11 @@ class LeftDrawer extends StatelessWidget {
             onTap: () {
               Navigator.pop(context);
               if (title != 'catalogue') {
-                Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => const ItemPage()));
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ItemPage()),
+                  (route) => route.settings.name == 'home',
+                );
               }
             },
           ),

@@ -117,8 +117,14 @@ class _LoginPageState extends State<LoginPage> {
 						// ignore: use_build_context_synchronously
 						Navigator.pushReplacement(
 							context,
-							MaterialPageRoute(builder: (context) => MyHomePage()),
+							MaterialPageRoute(
+                settings: const RouteSettings(name: 'home'),
+                builder: (context) => MyHomePage(),
+              ),
 						);
+            if (!context.mounted) {
+              return;
+            }
 						ScaffoldMessenger.of(context)
 							..hideCurrentSnackBar()
 							..showSnackBar(SnackBar(
