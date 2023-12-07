@@ -1,3 +1,4 @@
+import 'package:sibook_mobile/screens/borrow.dart';
 import 'package:sibook_mobile/screens/login.dart';
 import 'package:flutter/material.dart';
 import 'package:sibook_mobile/screens/item_list_page.dart';
@@ -37,26 +38,28 @@ class ShopCard extends StatelessWidget {
 			} else if (item.name == "Lihat Item") {
 				Navigator.push(context,
 					MaterialPageRoute(builder: (context) => const ItemPage()));
-			}else if (item.name == "Logout") {
+			}else if (item.name == "Borrow"){
+        Navigator.push(context,
+					MaterialPageRoute(builder: (context) => const BorrowPage()));
+      }
+      else if (item.name == "Logout") {
 				final response = await request.logout(
+					// TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
 					"http://127.0.0.1:8000/auth/logout/");
 				String message = response["message"];
-        if (!context.mounted) {
-          return;
-        }
 				if (response['status']) {
-          String uname = response["username"];
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text("$message Sampai jumpa, $uname."),
-          ));
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => const LoginPage()),
-          );
+				String uname = response["username"];
+				ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+					content: Text("$message Sampai jumpa, $uname."),
+				));
+				Navigator.pushReplacement(
+					context,
+					MaterialPageRoute(builder: (context) => const LoginPage()),
+				);
 				} else {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(message),
-          ));
+				ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+					content: Text("$message"),
+				));
 				}
 			}
 			},
