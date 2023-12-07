@@ -165,18 +165,24 @@ class _AddItemState extends State<AddItemForm> {
                         if (response['status'] == 'success') {
                           ScaffoldMessenger.of(context)
                               .showSnackBar(const SnackBar(
-                                content: Text("Item baru berhasil disimpan!"),
-                              ));
+                                  content: Text("Item baru berhasil disimpan!")));
                           Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => MyHomePage()),
-                          );
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => MyHomePage()));
+                        } else if (response['status'] == 'full') {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                                  content: Text("Maaf, katalog buku sudah penuh.")));
+                        } else if (response['status'] == 'alrExists') {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                                  content:
+                                      Text("Buku dengan judul yang sama sudah ada di katalog!")));
                         } else {
                           ScaffoldMessenger.of(context)
                               .showSnackBar(const SnackBar(
-                                content: Text("Terdapat kesalahan, silakan coba lagi."),
-                              ));
+                                  content: Text("Terdapat kesalahan, silakan coba lagi.")));
                         }
                       }
                     },

@@ -4,15 +4,15 @@ import 'package:sibook_mobile/screens/item_list_page.dart';
 import 'package:sibook_mobile/screens/menu.dart';
 
 class LeftDrawer extends StatelessWidget {
-	const LeftDrawer({super.key, required this.title});
+  const LeftDrawer({super.key, required this.title});
 
   final String title;
 
-	@override
-	Widget build(BuildContext context) {
-		return Drawer(
-			child: ListView(
-				children: [
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      child: ListView(
+        children: [
           const DrawerHeader(
             decoration: BoxDecoration(color: Colors.black),
             child: Column(
@@ -45,13 +45,14 @@ class LeftDrawer extends StatelessWidget {
 
             //Ketika diklik akan ke homepage
             onTap: () {
-              Navigator.pop(context);
               if (title != 'home') {
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (context) => MyHomePage()),
                   (route) => false,
                 );
+              } else {
+                Navigator.pop(context);
               }
             },
           ),
@@ -61,13 +62,14 @@ class LeftDrawer extends StatelessWidget {
 
             // ketika diklik akan ke forms add_item
             onTap: () {
-              Navigator.pop(context);
               if (title != 'donate') {
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (context) => const AddItemForm()),
                   (route) => route.settings.name == 'home',
                 );
+              } else {
+                Navigator.pop(context);
               }
             },
           ),
@@ -77,18 +79,19 @@ class LeftDrawer extends StatelessWidget {
 
             // ketika diklik akan ke list item
             onTap: () {
-              Navigator.pop(context);
               if (title != 'catalogue') {
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (context) => const ItemPage()),
                   (route) => route.settings.name == 'home',
                 );
+              } else {
+                Navigator.pop(context);
               }
             },
           ),
-				],
-			),
-		);
-	}
+        ],
+      ),
+    );
+  }
 }
