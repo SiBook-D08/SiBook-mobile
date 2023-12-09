@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sibook_mobile/models/Item.dart';
+import 'package:sibook_mobile/models/product.dart';
 import 'package:sibook_mobile/screens/item_list_page.dart';
 import 'package:sibook_mobile/widgets/item_card.dart';
 import 'package:sibook_mobile/widgets/left_drawer.dart';
@@ -27,7 +27,7 @@ class MyHomePage extends StatelessWidget {
 			backgroundColor: Color.fromARGB(221, 67, 182, 54),
 			foregroundColor: const Color.fromARGB(255, 125, 113, 113),
 		),
-		drawer: const LeftDrawer(),
+		drawer: const LeftDrawer(title: "Menu"),
 		body: SingleChildScrollView(
 			// Widget wrapper yang dapat discroll
 			child: Padding(

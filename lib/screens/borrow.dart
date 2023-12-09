@@ -1,4 +1,4 @@
-import 'package:sibook_mobile/models/Item.dart';
+import 'package:sibook_mobile/models/product.dart';
 import 'package:sibook_mobile/models/cart.dart';
 import 'package:sibook_mobile/screens/oneitem.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +26,7 @@ class _BorrowPageState extends State<BorrowPage> {
   List<Product> allCart = []; // List to hold filtered items
   Future<List<Product>> fetchItem() async {
     // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
-    var url = Uri.parse('http://127.0.0.1:8000/catalogue/get-books/');
+    var url = Uri.parse('http://127.0.0.1:8000/borrow/get-books/');
     var response = await http.get(
       url,
       headers: {"Content-Type": "application/json"},
@@ -90,7 +90,7 @@ class _BorrowPageState extends State<BorrowPage> {
         appBar: AppBar(
           title: const Text('Borrow'),
         ),
-        drawer: const LeftDrawer(),
+        drawer: const LeftDrawer(title:"Borrow"),
         body: Column(
           children: [
             Padding(
@@ -248,35 +248,66 @@ class _BorrowPageState extends State<BorrowPage> {
                     ),
                     itemCount: itemsToShow.length,
                     itemBuilder: (_, index) => Card(
+                      color: const Color.fromARGB(255, 2, 57, 101),
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: ConstrainedBox(
                           constraints: BoxConstraints(
                             minWidth: 150.0, // Set a minimum width for the card
-                            maxHeight: 10.0,
+                            maxHeight: 0.0,
+                            
                           ),
                           child: Column(
+
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+
+                              const SizedBox(height: 10),
+                              Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20.0), // Adjust the value for oval shape
+                                color: Color.fromARGB(255, 66, 156, 69),
+                              ),
+                              padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0), // Adjust padding as needed
+                              child:Text(
+                                "Available",
+                                style: const TextStyle(
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold,
+                                  backgroundColor: Color.fromARGB(255, 66, 156, 69),
+                                  color: Colors.white,
+                                  
+                                ),
+                              ),),
                               Text(
                                 itemsToShow[index].fields.title,
                                 style: const TextStyle(
                                   fontSize: 18.0,
                                   fontWeight: FontWeight.bold,
+                                  color: Color.fromARGB(255, 255, 160, 234),
                                 ),
                               ),
                               const SizedBox(height: 10),
-                              Text(itemsToShow[index].fields.author),
+                              Text(itemsToShow[index].fields.author,
+                               style: const TextStyle(
+                                  color: Colors.white,
+                                ),),
                               const SizedBox(height: 10),
                               Text(
                                 itemsToShow[index].fields.description.length >
                                         200
                                     ? "${itemsToShow[index].fields.description.substring(0, 201)}..."
                                     : itemsToShow[index].fields.description,
+                                    style: const TextStyle(
+                                    color: Colors.white,
+                                    )
                               ),
                               const SizedBox(height: 10),
                               Text(
                                 "Banyak Halaman: ${itemsToShow[index].fields.numPages}",
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                )
                               ),
                               const SizedBox(height: 5),
                               ElevatedButton(
@@ -313,7 +344,7 @@ class _BorrowPageState extends State<BorrowPage> {
                                 },
                                 child: Text('Masukkan Keranjang'),
                               ),
-                            ],
+                          ],
                           ),
                         ),
                       ),
