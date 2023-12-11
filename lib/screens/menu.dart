@@ -3,13 +3,14 @@ import 'package:sibook_mobile/widgets/item_card.dart';
 import 'package:sibook_mobile/widgets/left_drawer.dart';
 
 class MyHomePage extends StatelessWidget {
-	MyHomePage({Key? key}) : super(key: key);
+  MyHomePage({Key? key}) : super(key: key);
 
 	final List<ShopItem> items = [
 		ShopItem("Lihat Item",  Icons.checklist, const Color(0xFF1A46BD)),
 		ShopItem("Tambah Item", Icons.add_shopping_cart, const Color(0xFF0F286B)),
 		ShopItem("Logout", Icons.logout, const Color(0xFF091840)),
     ShopItem("Borrow", Icons.book, const Color.fromARGB(255, 29, 52, 115)),
+    ShopItem("Favorit", Icons.bookmark, const Color.fromARGB(255, 8, 67, 232)),
 	];
 
 	@override

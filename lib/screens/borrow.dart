@@ -24,7 +24,7 @@ class _BorrowPageState extends State<BorrowPage> {
   List<Product> allCart = []; // List to hold filtered items
   Future<List<Product>> fetchItem() async {
     // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
-    var url = Uri.parse('http://127.0.0.1:8000/catalogue/get-books/');
+    var url = Uri.parse('http://127.0.0.1:8000/borrow/get-books/');
     var response = await http.get(
       url,
       headers: {"Content-Type": "application/json"},
@@ -85,224 +85,87 @@ class _BorrowPageState extends State<BorrowPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Borrow'),
-        ),
-        drawer: const LeftDrawer(title: 'borrow'),
-        body: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                controller: searchController,
-                decoration: InputDecoration(
-                  labelText: 'Search',
-                  hintText: 'Search for items...',
-                  prefixIcon: const Icon(Icons.search),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
+      appBar: AppBar(
+        title: const Text('Borrow'),
+      ),
+      drawer: const LeftDrawer(title: 'borrow'),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              controller: searchController,
+              decoration: InputDecoration(
+                labelText: 'Search',
+                hintText: 'Search for items...',
+                prefixIcon: const Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
                 ),
-                onChanged: (value) {
-                  setState(() {
-                    filteredItems = allItems.where((element) {
-                      return element.fields.title
-                          .toLowerCase()
-                          .contains(value.toLowerCase());
-                    }).toList();
-                  });
-                },
               ),
+              onChanged: (value) {
+                setState(() {
+                  filteredItems = allItems.where((element) {
+                    return element.fields.title
+                        .toLowerCase()
+                        .contains(value.toLowerCase());
+                  }).toList();
+                });
+              },
             ),
-            Expanded(
-              child: FutureBuilder(
-                future: fetchCart(),
-                builder: (context, AsyncSnapshot snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-                  if (snapshot.hasError) {
-                    return Center(child: Text('Error: ${snapshot.error}'));
-                  }
+          ),
+          Expanded(
+            child: FutureBuilder(
+              future: fetchCart(),
+              builder: (context, AsyncSnapshot snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                }
 
-                  allCart = snapshot.data;
-                  print(snapshot.data);
-                  List<Product> itemsToShow = allCart;
-                  return Column(
-                    children: [
-                      Expanded(
-                        child: ListView.builder(
-                          itemCount: itemsToShow.length,
-                          itemBuilder: (_, index) => InkWell(
-                            child: Container(
-                              margin: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 8,
-                              ),
-                              padding: const EdgeInsets.all(20.0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    itemsToShow[index].fields.title,
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 5),
-                                  ElevatedButton(
-                                    onPressed: () async {
-                                      final request =
-                                          Provider.of<CookieRequest>(context,
-                                              listen: false);
-                                      final response = await request.post(
-                                          'http://localhost:8000/borrow/remove-cart-flutter/${itemsToShow[index].pk}/',
-                                          {});
-
-                                      if (!context.mounted) {
-                                        return;
-                                      }
-
-                                      if (response['status'] == 'success') {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(const SnackBar(
-                                          content: Text(
-                                              "Produk baru berhasil disimpan!"),
-                                        ));
-                                        Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const BorrowPage()),
-                                        );
-                                      } else {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(const SnackBar(
-                                          content: Text(
-                                              "Terdapat kesalahan, silakan coba lagi."),
-                                        ));
-                                      }
-                                    },
-                                    child: const Text('Keluarkan'),
-                                  ),
-                                ],
-                              ),
+                allCart = snapshot.data;
+                print(snapshot.data);
+                List<Product> itemsToShow = allCart;
+                return Column(
+                  children: [
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: itemsToShow.length,
+                        itemBuilder: (_, index) => InkWell(
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 8,
                             ),
-                          ),
-                        ),
-                      ),
-                      ElevatedButton(
-                        onPressed: () async {
-                          final request = Provider.of<CookieRequest>(context,
-                              listen: false);
-                          final response = await request.post(
-                              'http://localhost:8000/borrow/add-to-list-flutter/',
-                              {'username': request.jsonData['username']});
-
-                          if (!context.mounted) {
-                            return;
-                          }
-
-                          if (response['status'] == 'success') {
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                              content: Text("Produk baru berhasil disimpan!"),
-                            ));
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const BorrowPage()),
-                            );
-                          } else {
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                              content: Text(
-                                  "Terdapat kesalahan, silakan coba lagi."),
-                            ));
-                          }
-                        },
-                        child: const Text('Pinjam'),
-                      ),
-                    ],
-                  );
-                },
-              ),
-            ),
-            Expanded(
-              child: FutureBuilder(
-                future: fetchItem(),
-                builder: (context, AsyncSnapshot snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-                  if (snapshot.hasError) {
-                    return Center(child: Text('Error: ${snapshot.error}'));
-                  }
-
-                  allItems = snapshot.data;
-                  List<Product> itemsToShow =
-                      searchController.text.isEmpty ? allItems : filteredItems;
-
-                  return GridView.builder(
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      crossAxisSpacing: 16.0,
-                      mainAxisSpacing: 16.0,
-                    ),
-                    itemCount: itemsToShow.length,
-                    itemBuilder: (_, index) => Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: ConstrainedBox(
-                          constraints: const BoxConstraints(
-                            minWidth: 150.0, // Set a minimum width for the card
-                            maxHeight: 10.0,
-                          ),
-                          child: SingleChildScrollView(
+                            padding: const EdgeInsets.all(20.0),
                             child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   itemsToShow[index].fields.title,
+                                  textAlign: TextAlign.center,
                                   style: const TextStyle(
-                                    fontSize: 18.0,
+                                    fontSize: 14.0,
                                     fontWeight: FontWeight.bold,
                                   ),
-                                ),
-                                const SizedBox(height: 10),
-                                Text(itemsToShow[index].fields.author),
-                                const SizedBox(height: 10),
-                                Text(
-                                  itemsToShow[index].fields.description.length >
-                                          200
-                                      ? "${itemsToShow[index].fields.description.substring(0, 201)}..."
-                                      : itemsToShow[index].fields.description,
-                                ),
-                                const SizedBox(height: 10),
-                                Text(
-                                  "Banyak Halaman: ${itemsToShow[index].fields.numPages}",
                                 ),
                                 const SizedBox(height: 5),
                                 ElevatedButton(
                                   onPressed: () async {
-                                    
-                                    final request = Provider.of<CookieRequest>(
-                                        context,
-                                        listen: false);
-                                        print("-> " + request.jsonData.toString());
+                                    final request =
+                                        Provider.of<CookieRequest>(context,
+                                            listen: false);
                                     final response = await request.post(
-                                        'http://localhost:8000/borrow/add-to-cart-flutter/${itemsToShow[index].pk}/',
-                                        {
-                                          'username': request.jsonData['username']
-                                        });
+                                        'http://localhost:8000/borrow/remove-cart-flutter/${itemsToShow[index].pk}/',
+                                        {});
 
                                     if (!context.mounted) {
                                       return;
                                     }
-                                    
+
                                     if (response['status'] == 'success') {
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(const SnackBar(
@@ -312,7 +175,8 @@ class _BorrowPageState extends State<BorrowPage> {
                                       Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => const BorrowPage()),
+                                            builder: (context) =>
+                                                const BorrowPage()),
                                       );
                                     } else {
                                       ScaffoldMessenger.of(context)
@@ -322,7 +186,7 @@ class _BorrowPageState extends State<BorrowPage> {
                                       ));
                                     }
                                   },
-                                  child: const Text('Masukkan Keranjang'),
+                                  child: const Text('Keluarkan'),
                                 ),
                               ],
                             ),
@@ -330,11 +194,176 @@ class _BorrowPageState extends State<BorrowPage> {
                         ),
                       ),
                     ),
-                  );
-                },
-              ),
+                    ElevatedButton(
+                      onPressed: () async {
+                        final request = Provider.of<CookieRequest>(context,
+                            listen: false);
+                        final response = await request.post(
+                            'http://localhost:8000/borrow/add-to-list-flutter/',
+                            {'username': request.jsonData['username']});
+
+                        if (!context.mounted) {
+                          return;
+                        }
+
+                        if (response['status'] == 'success') {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text("Produk baru berhasil disimpan!"),
+                          ));
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const BorrowPage()),
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text(
+                                "Terdapat kesalahan, silakan coba lagi."),
+                          ));
+                        }
+                      },
+                      child: const Text('Pinjam'),
+                    ),
+                  ],
+                );
+              },
             ),
-          ],
-        ));
+          ),
+          Expanded(
+            child: FutureBuilder(
+              future: fetchItem(),
+              builder: (context, AsyncSnapshot snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                }
+
+                allItems = snapshot.data;
+                List<Product> itemsToShow =
+                    searchController.text.isEmpty ? allItems : filteredItems;
+
+                return GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    crossAxisSpacing: 16.0,
+                    mainAxisSpacing: 16.0,
+                  ),
+                  itemCount: itemsToShow.length,
+                  itemBuilder: (_, index) => Card(
+                    color: const Color.fromARGB(255, 2, 57, 101),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(
+                          minWidth: 150.0, // Set a minimum width for the card
+                          maxHeight: 0.0,
+                          
+                        ),
+                        child: SingleChildScrollView(
+                          child: Column(
+
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(height: 10),
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20.0), // Adjust the value for oval shape
+                                  color: const Color.fromARGB(255, 66, 156, 69),
+                                ),
+                                padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0), // Adjust padding as needed
+                                child: const Text(
+                                  "Available",
+                                  style: TextStyle(
+                                    fontSize: 20.0,
+                                    fontWeight: FontWeight.bold,
+                                    backgroundColor: Color.fromARGB(255, 66, 156, 69),
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                              Text(
+                                itemsToShow[index].fields.title,
+                                style: const TextStyle(
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color.fromARGB(255, 255, 160, 234),
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              Text(
+                                itemsToShow[index].fields.author,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              Text(
+                                itemsToShow[index].fields.description.length >
+                                        200
+                                    ? "${itemsToShow[index].fields.description.substring(0, 201)}..."
+                                    : itemsToShow[index].fields.description,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                    )
+                              ),
+                              const SizedBox(height: 10),
+                              Text(
+                                "Banyak Halaman: ${itemsToShow[index].fields.numPages}",
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                )
+                              ),
+                              const SizedBox(height: 5),
+                              ElevatedButton(
+                                onPressed: () async {
+                                  final request = Provider.of<CookieRequest>(context, listen: false);
+                                  print("-> ${request.jsonData.toString()}");
+                                  final response = await request.post(
+                                    'http://localhost:8000/borrow/add-to-cart-flutter/${itemsToShow[index].pk}/',
+                                    { 'username': request.jsonData['username'] }
+                                  );
+
+                                  if (!context.mounted) {
+                                    return;
+                                  }
+                                  
+                                  if (response['status'] == 'success') {
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(const SnackBar(
+                                      content: Text(
+                                          "Produk baru berhasil disimpan!"),
+                                    ));
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => const BorrowPage()),
+                                    );
+                                  } else {
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(const SnackBar(
+                                      content: Text(
+                                          "Terdapat kesalahan, silakan coba lagi."),
+                                    ));
+                                  }
+                                },
+                                child: const Text('Masukkan Keranjang'),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      )
+    );
   }
 }

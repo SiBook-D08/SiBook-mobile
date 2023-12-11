@@ -1,4 +1,5 @@
 import 'package:sibook_mobile/screens/borrow.dart';
+import 'package:sibook_mobile/screens/favorite_page.dart';
 import 'package:sibook_mobile/screens/login.dart';
 import 'package:flutter/material.dart';
 import 'package:sibook_mobile/screens/item_list_page.dart';
@@ -7,16 +8,16 @@ import 'package:provider/provider.dart';
 import 'package:sibook_mobile/screens/add_item_form.dart';
 
 class ShopItem {
-	final String name;
-	final IconData icon;
-	final Color color;
-	ShopItem(this.name, this.icon, this.color);
+  final String name;
+  final IconData icon;
+  final Color color;
+  ShopItem(this.name, this.icon, this.color);
 }
 
 class ShopCard extends StatelessWidget {
-	final ShopItem item;
+  final ShopItem item;
 
-	const ShopCard(this.item, {super.key}); // Constructor
+  const ShopCard(this.item, {super.key}); // Constructor
 
 	@override
 	Widget build(BuildContext context) {
@@ -49,8 +50,13 @@ class ShopCard extends StatelessWidget {
               settings: const RouteSettings(name: 'borrow'),
               builder: (context) => const BorrowPage(),
             ));
-        }
-        else if (item.name == "Logout") {
+        } else if (item.name == "Favorit") {
+            Navigator.push(context,
+              MaterialPageRoute(
+                settings: const RouteSettings(name: 'favorite'),
+                builder: (context) => const FavoritePage(),
+              ));
+        } else if (item.name == "Logout") {
           final response = await request.logout(
             // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
             "http://127.0.0.1:8000/auth/logout/");
