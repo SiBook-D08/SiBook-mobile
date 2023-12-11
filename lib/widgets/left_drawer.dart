@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sibook_mobile/screens/add_item_form.dart';
 import 'package:sibook_mobile/screens/borrow.dart';
+import 'package:sibook_mobile/screens/favorite_page.dart';
 import 'package:sibook_mobile/screens/item_list_page.dart';
 import 'package:sibook_mobile/screens/menu.dart';
 
@@ -110,6 +111,25 @@ class LeftDrawer extends StatelessWidget {
                   MaterialPageRoute(
                     settings: const RouteSettings(name: 'borrow'),
                     builder: (context) => const BorrowPage(),
+                  ),
+                  (route) => route.settings.name == 'home',
+                );
+              }
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.bookmark),
+            title: const Text("Favoritkan Buku"),
+
+            // ketika diklik akan ke list item
+            onTap: () async {
+              await Navigator.maybePop(context);
+              if (context.mounted && title != 'favorite') {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    settings: const RouteSettings(name: 'favorite'),
+                    builder: (context) => const FavoritePage(),
                   ),
                   (route) => route.settings.name == 'home',
                 );

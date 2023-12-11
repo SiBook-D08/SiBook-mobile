@@ -90,15 +90,15 @@ class ShopCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
-                item.icon,
-                color: Colors.white,
-                size: 100.0,
+                  item.icon,
+                  color: Colors.white,
+                  size: 100.0,
                 ),
                 const Padding(padding: EdgeInsets.all(3)),
                 Text(
-                item.name,
-                textAlign: TextAlign.center,
-                style: const TextStyle(color: Colors.white),
+                  item.name,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(color: Colors.white),
                 ),
               ],
             ),
