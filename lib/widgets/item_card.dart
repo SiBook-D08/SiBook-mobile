@@ -6,6 +6,7 @@ import 'package:sibook_mobile/screens/item_list_page.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:sibook_mobile/screens/add_item_form.dart';
+import 'package:sibook_mobile/screens/return_book.dart';
 
 class ShopItem {
   final String name;
@@ -50,7 +51,10 @@ class ShopCard extends StatelessWidget {
               settings: const RouteSettings(name: 'borrow'),
               builder: (context) => const BorrowPage(),
             ));
-        } else if (item.name == "Favorit") {
+        } else if (item.name == "Return"){
+        Navigator.push(context,
+					MaterialPageRoute(builder: (context) => const BorrowedItemPage()));
+      } else if (item.name == "Favorit") {
             Navigator.push(context,
               MaterialPageRoute(
                 settings: const RouteSettings(name: 'favorite'),
