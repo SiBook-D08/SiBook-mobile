@@ -82,28 +82,24 @@ class ShopCard extends StatelessWidget {
           }
         }
         },
-        child: Container(
-          // Container untuk menyimpan Icon dan Text
-          padding: const EdgeInsets.all(8),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  item.icon,
-                  color: Colors.white,
-                  size: 100.0,
-                ),
-                const Padding(padding: EdgeInsets.all(3)),
-                Text(
-                  item.name,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(color: Colors.white),
-                ),
-              ],
+        child: SingleChildScrollView(
+        child: Column(
+          // crossAxisAlignment: CrossAxisAlignment.center,
+          // mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Icon(
+              item.icon,
+              color: Colors.white,
+              size: 100.0,
             ),
-          ),
+            Text(
+              item.name,
+              style: const TextStyle(color: Colors.white),
+            ),
+          ],
         ),
+      )
+
       ),
 		);
 	}
