@@ -29,7 +29,7 @@ class LoginPage extends StatefulWidget {
 	const LoginPage({super.key});
 
 	@override
-	_LoginPageState createState() => _LoginPageState();
+	State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
@@ -41,7 +41,7 @@ class _LoginPageState extends State<LoginPage> {
 		final request = context.watch<CookieRequest>();
 		return Scaffold(
 		appBar: AppBar(
-      backgroundColor: Color.fromARGB(255, 142, 168, 125),
+      backgroundColor: const Color.fromARGB(255, 142, 168, 125),
 			title: const Text('Login',
 							textAlign: TextAlign.center,
 							style: TextStyle(
@@ -78,7 +78,7 @@ class _LoginPageState extends State<LoginPage> {
 				const SizedBox(height: 20.0),
 				TextField(
 					controller: _usernameController,
-          style: const TextStyle(color: const Color.fromARGB(255, 243, 231, 231)),
+          style: const TextStyle(color: Color.fromARGB(255, 243, 231, 231)),
 					decoration: const InputDecoration(
 						labelText: 'Username',
 						labelStyle: TextStyle(color: Colors.white),
@@ -87,7 +87,7 @@ class _LoginPageState extends State<LoginPage> {
 				const SizedBox(height: 12.0),
 				TextField(
 					controller: _passwordController,
-          style: const TextStyle(color: const Color.fromARGB(255, 243, 231, 231)),
+          style: const TextStyle(color: Color.fromARGB(255, 243, 231, 231)),
 					decoration: const InputDecoration(
 						labelText: 'Password',
 						labelStyle: TextStyle(color: Colors.white),

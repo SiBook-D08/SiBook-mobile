@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sibook_mobile/screens/add_item_form.dart';
+import 'package:sibook_mobile/screens/borrow.dart';
 import 'package:sibook_mobile/screens/item_list_page.dart';
 import 'package:sibook_mobile/screens/menu.dart';
 
@@ -44,15 +45,17 @@ class LeftDrawer extends StatelessWidget {
             title: const Text('Homepage'),
 
             //Ketika diklik akan ke homepage
-            onTap: () {
-              if (title != 'home') {
+            onTap: () async {
+              await Navigator.maybePop(context);
+              if (context.mounted && title != 'home') {
                 Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => MyHomePage()),
+                  MaterialPageRoute(
+                    settings: const RouteSettings(name: 'home'),
+                    builder: (context) => MyHomePage(),
+                  ),
                   (route) => false,
                 );
-              } else {
-                Navigator.pop(context);
               }
             },
           ),
@@ -61,15 +64,17 @@ class LeftDrawer extends StatelessWidget {
             title: const Text("Tambah Item"),
 
             // ketika diklik akan ke forms add_item
-            onTap: () {
-              if (title != 'donate') {
+            onTap: () async {
+              await Navigator.maybePop(context);
+              if (context.mounted && title != 'donate') {
                 Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => const AddItemForm()),
+                  MaterialPageRoute(
+                    settings: const RouteSettings(name: 'donate'),
+                    builder: (context) => const AddItemForm(),
+                  ),
                   (route) => route.settings.name == 'home',
                 );
-              } else {
-                Navigator.pop(context);
               }
             },
           ),
@@ -78,15 +83,36 @@ class LeftDrawer extends StatelessWidget {
             title: const Text("Lihat Item"),
 
             // ketika diklik akan ke list item
-            onTap: () {
-              if (title != 'catalogue') {
+            onTap: () async {
+              await Navigator.maybePop(context);
+              if (context.mounted && title != 'catalogue') {
                 Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => const ItemPage()),
+                  MaterialPageRoute(
+                    settings: const RouteSettings(name: 'catalogue'),
+                    builder: (context) => const ItemPage(),
+                  ),
                   (route) => route.settings.name == 'home',
                 );
-              } else {
-                Navigator.pop(context);
+              }
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.shopping_bag_outlined),
+            title: const Text("Pinjam Buku"),
+
+            // ketika diklik akan ke page peminjaman buku
+            onTap: () async {
+              await Navigator.maybePop(context);
+              if (context.mounted && title != 'borrow') {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    settings: const RouteSettings(name: 'borrow'),
+                    builder: (context) => const BorrowPage(),
+                  ),
+                  (route) => route.settings.name == 'home',
+                );
               }
             },
           ),

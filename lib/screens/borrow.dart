@@ -1,13 +1,11 @@
-import 'package:sibook_mobile/models/Item.dart';
+import 'package:sibook_mobile/models/product.dart';
 import 'package:sibook_mobile/models/cart.dart';
-import 'package:sibook_mobile/screens/oneitem.dart';
 import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:sibook_mobile/widgets/left_drawer.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
-import 'package:provider/provider.dart';
 import 'package:provider/provider.dart';
 
 class BorrowPage extends StatefulWidget {
@@ -45,7 +43,7 @@ class _BorrowPageState extends State<BorrowPage> {
   }
 
   Future<Product> fetchBookById(int id) async {
-    var url = Uri.parse('http://localhost:8000/borrow/get-book-data/${id}');
+    var url = Uri.parse('http://localhost:8000/borrow/get-book-data/$id');
     var response =
         await http.get(url, headers: {"Content-Type": "application/json"});
 
@@ -90,7 +88,7 @@ class _BorrowPageState extends State<BorrowPage> {
         appBar: AppBar(
           title: const Text('Borrow'),
         ),
-        drawer: const LeftDrawer(),
+        drawer: const LeftDrawer(title: 'borrow'),
         body: Column(
           children: [
             Padding(
@@ -100,7 +98,7 @@ class _BorrowPageState extends State<BorrowPage> {
                 decoration: InputDecoration(
                   labelText: 'Search',
                   hintText: 'Search for items...',
-                  prefixIcon: Icon(Icons.search),
+                  prefixIcon: const Icon(Icons.search),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
@@ -154,7 +152,7 @@ class _BorrowPageState extends State<BorrowPage> {
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  SizedBox(height: 5),
+                                  const SizedBox(height: 5),
                                   ElevatedButton(
                                     onPressed: () async {
                                       final request =
@@ -163,6 +161,10 @@ class _BorrowPageState extends State<BorrowPage> {
                                       final response = await request.post(
                                           'http://localhost:8000/borrow/remove-cart-flutter/${itemsToShow[index].pk}/',
                                           {});
+
+                                      if (!context.mounted) {
+                                        return;
+                                      }
 
                                       if (response['status'] == 'success') {
                                         ScaffoldMessenger.of(context)
@@ -174,7 +176,7 @@ class _BorrowPageState extends State<BorrowPage> {
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  BorrowPage()),
+                                                  const BorrowPage()),
                                         );
                                       } else {
                                         ScaffoldMessenger.of(context)
@@ -200,6 +202,10 @@ class _BorrowPageState extends State<BorrowPage> {
                               'http://localhost:8000/borrow/add-to-list-flutter/',
                               {'username': request.jsonData['username']});
 
+                          if (!context.mounted) {
+                            return;
+                          }
+
                           if (response['status'] == 'success') {
                             ScaffoldMessenger.of(context)
                                 .showSnackBar(const SnackBar(
@@ -208,7 +214,7 @@ class _BorrowPageState extends State<BorrowPage> {
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => BorrowPage()),
+                                  builder: (context) => const BorrowPage()),
                             );
                           } else {
                             ScaffoldMessenger.of(context)
@@ -218,7 +224,7 @@ class _BorrowPageState extends State<BorrowPage> {
                             ));
                           }
                         },
-                        child: Text('Pinjam'),
+                        child: const Text('Pinjam'),
                       ),
                     ],
                   );
@@ -241,7 +247,7 @@ class _BorrowPageState extends State<BorrowPage> {
                       searchController.text.isEmpty ? allItems : filteredItems;
 
                   return GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 3,
                       crossAxisSpacing: 16.0,
                       mainAxisSpacing: 16.0,
@@ -251,69 +257,75 @@ class _BorrowPageState extends State<BorrowPage> {
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: ConstrainedBox(
-                          constraints: BoxConstraints(
+                          constraints: const BoxConstraints(
                             minWidth: 150.0, // Set a minimum width for the card
                             maxHeight: 10.0,
                           ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                itemsToShow[index].fields.title,
-                                style: const TextStyle(
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.bold,
+                          child: SingleChildScrollView(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  itemsToShow[index].fields.title,
+                                  style: const TextStyle(
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(height: 10),
-                              Text(itemsToShow[index].fields.author),
-                              const SizedBox(height: 10),
-                              Text(
-                                itemsToShow[index].fields.description.length >
-                                        200
-                                    ? "${itemsToShow[index].fields.description.substring(0, 201)}..."
-                                    : itemsToShow[index].fields.description,
-                              ),
-                              const SizedBox(height: 10),
-                              Text(
-                                "Banyak Halaman: ${itemsToShow[index].fields.numPages}",
-                              ),
-                              const SizedBox(height: 5),
-                              ElevatedButton(
-                                onPressed: () async {
-                                  
-                                  final request = Provider.of<CookieRequest>(
-                                      context,
-                                      listen: false);
-                                      print("-> " + request.jsonData.toString());
-                                  final response = await request.post(
-                                      'http://localhost:8000/borrow/add-to-cart-flutter/${itemsToShow[index].pk}/',
-                                      {
-                                        'username': request.jsonData['username']
-                                      });
-                                  
-                                  if (response['status'] == 'success') {
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(const SnackBar(
-                                      content: Text(
-                                          "Produk baru berhasil disimpan!"),
-                                    ));
-                                    Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => BorrowPage()),
-                                    );
-                                  } else {
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(const SnackBar(
-                                      content: Text(
-                                          "Terdapat kesalahan, silakan coba lagi."),
-                                    ));
-                                  }
-                                },
-                                child: Text('Masukkan Keranjang'),
-                              ),
-                            ],
+                                const SizedBox(height: 10),
+                                Text(itemsToShow[index].fields.author),
+                                const SizedBox(height: 10),
+                                Text(
+                                  itemsToShow[index].fields.description.length >
+                                          200
+                                      ? "${itemsToShow[index].fields.description.substring(0, 201)}..."
+                                      : itemsToShow[index].fields.description,
+                                ),
+                                const SizedBox(height: 10),
+                                Text(
+                                  "Banyak Halaman: ${itemsToShow[index].fields.numPages}",
+                                ),
+                                const SizedBox(height: 5),
+                                ElevatedButton(
+                                  onPressed: () async {
+                                    
+                                    final request = Provider.of<CookieRequest>(
+                                        context,
+                                        listen: false);
+                                        print("-> " + request.jsonData.toString());
+                                    final response = await request.post(
+                                        'http://localhost:8000/borrow/add-to-cart-flutter/${itemsToShow[index].pk}/',
+                                        {
+                                          'username': request.jsonData['username']
+                                        });
+
+                                    if (!context.mounted) {
+                                      return;
+                                    }
+                                    
+                                    if (response['status'] == 'success') {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(const SnackBar(
+                                        content: Text(
+                                            "Produk baru berhasil disimpan!"),
+                                      ));
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => const BorrowPage()),
+                                      );
+                                    } else {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(const SnackBar(
+                                        content: Text(
+                                            "Terdapat kesalahan, silakan coba lagi."),
+                                      ));
+                                    }
+                                  },
+                                  child: const Text('Masukkan Keranjang'),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
