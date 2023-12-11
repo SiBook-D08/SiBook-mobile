@@ -122,16 +122,15 @@ class _BorrowPageState extends State<BorrowPage> {
                 }
 
                 allCart = snapshot.data;
-                print(snapshot.data);
                 List<Product> itemsToShow = allCart;
                 return Column(
                   children: [
                     Expanded(
                       child: Column(
                         children: [
-                          Text(
+                          const Text(
                             "Isi Keranjang Kamu",
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 20.0, // Adjust the font size as needed
                               fontWeight: FontWeight.bold,
                             ),
@@ -176,12 +175,11 @@ class _BorrowPageState extends State<BorrowPage> {
                                               content: Text(
                                                   "Produk baru berhasil disimpan!"),
                                             ));
-                                            Navigator.pushReplacement(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      BorrowPage()),
-                                            );
+                                            List<Product> cartData =
+                                                await fetchCart();
+                                            setState(() {
+                                              allCart = cartData;
+                                            });
                                           } else {
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(const SnackBar(
@@ -210,16 +208,19 @@ class _BorrowPageState extends State<BorrowPage> {
                             {'username': request.jsonData['username']});
 
                         if (response['status'] == 'success') {
+                          // ignore: use_build_context_synchronously
                           ScaffoldMessenger.of(context)
                               .showSnackBar(const SnackBar(
                             content: Text("Produk baru berhasil disimpan!"),
                           ));
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => BorrowPage()),
-                          );
+
+                          setState(() {
+                            List<Product> temp = allCart;
+                            temp.clear();
+                            allCart = temp;
+                          });
                         } else {
+                          // ignore: use_build_context_synchronously
                           ScaffoldMessenger.of(context)
                               .showSnackBar(const SnackBar(
                             content:
@@ -251,7 +252,7 @@ class _BorrowPageState extends State<BorrowPage> {
                         : filteredItems;
 
                     return GridView.builder(
-                      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                         maxCrossAxisExtent:
                             500.0, // Maximum pixel width of items.
                         crossAxisSpacing: 16.0,
@@ -350,12 +351,17 @@ class _BorrowPageState extends State<BorrowPage> {
                                         content: Text(
                                             "Produk baru berhasil disimpan!"),
                                       ));
-                                      Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const BorrowPage()),
-                                      );
+                                      List<Product> itemsBaru =
+                                          await fetchItem();
+                                      setState(() {
+                                        itemsToShow = itemsBaru;
+                                      });
+                                      // Navigator.pushReplacement(
+                                      //   context,
+                                      //   MaterialPageRoute(
+                                      //       builder: (context) =>
+                                      //           const BorrowPage()),
+                                      // );
                                     } else {
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(const SnackBar(
