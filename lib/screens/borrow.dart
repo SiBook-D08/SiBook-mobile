@@ -18,6 +18,7 @@ class BorrowPage extends StatefulWidget {
 
 class _BorrowPageState extends State<BorrowPage> {
   // Define a TextEditingController for handling user input in the search bar
+
   TextEditingController searchController = TextEditingController();
   List<Product> allItems = []; // List to hold all items
   List<Product> filteredItems = [];
@@ -82,6 +83,7 @@ class _BorrowPageState extends State<BorrowPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Color.fromRGBO(3, 2, 46, 1),
         appBar: AppBar(
           title: const Text('Borrow'),
         ),
@@ -91,10 +93,13 @@ class _BorrowPageState extends State<BorrowPage> {
             padding: const EdgeInsets.all(8.0),
             child: TextField(
               controller: searchController,
+              style: const TextStyle(color: Color.fromARGB(255, 243, 231, 231)),
               decoration: InputDecoration(
                 labelText: 'Search',
                 hintText: 'Search for items...',
                 prefixIcon: const Icon(Icons.search),
+                labelStyle: TextStyle(color: Colors.white),
+                hintStyle:TextStyle(color: Colors.white) ,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
@@ -122,18 +127,18 @@ class _BorrowPageState extends State<BorrowPage> {
                 }
 
                 allCart = snapshot.data;
-                print(snapshot.data);
                 List<Product> itemsToShow = allCart;
                 return Column(
                   children: [
                     Expanded(
                       child: Column(
                         children: [
-                          Text(
+                          const Text(
                             "Isi Keranjang Kamu",
-                            style: const TextStyle(
-                              fontSize: 20.0, // Adjust the font size as needed
+                            style: TextStyle(
+                              fontSize: 30.0, // Adjust the font size as needed
                               fontWeight: FontWeight.bold,
+                              color: Colors.white,
                             ),
                           ),
                           Expanded(
@@ -141,6 +146,7 @@ class _BorrowPageState extends State<BorrowPage> {
                               itemCount: itemsToShow.length,
                               itemBuilder: (_, index) => InkWell(
                                 child: Container(
+                                  color:const Color.fromARGB(255, 2, 57, 101),
                                   margin: const EdgeInsets.symmetric(
                                     horizontal: 16,
                                     vertical: 8,
@@ -157,6 +163,7 @@ class _BorrowPageState extends State<BorrowPage> {
                                         style: const TextStyle(
                                           fontSize: 14.0,
                                           fontWeight: FontWeight.bold,
+                                          color : Colors.white,
                                         ),
                                       ),
                                       SizedBox(height: 5),
@@ -176,12 +183,12 @@ class _BorrowPageState extends State<BorrowPage> {
                                               content: Text(
                                                   "Produk baru berhasil disimpan!"),
                                             ));
-                                            Navigator.pushReplacement(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      BorrowPage()),
-                                            );
+                                            // ignore: use_build_context_synchronously
+                                            List<Product> cartData =
+                                                await fetchCart();
+                                            setState(() {
+                                              allCart = cartData;
+                                            });
                                           } else {
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(const SnackBar(
@@ -210,16 +217,19 @@ class _BorrowPageState extends State<BorrowPage> {
                             {'username': request.jsonData['username']});
 
                         if (response['status'] == 'success') {
+                          // ignore: use_build_context_synchronously
                           ScaffoldMessenger.of(context)
                               .showSnackBar(const SnackBar(
                             content: Text("Produk baru berhasil disimpan!"),
                           ));
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => BorrowPage()),
-                          );
+
+                          setState(() {
+                            List<Product> temp = allCart;
+                            temp.clear();
+                            allCart = temp;
+                          });
                         } else {
+                          // ignore: use_build_context_synchronously
                           ScaffoldMessenger.of(context)
                               .showSnackBar(const SnackBar(
                             content:
@@ -251,7 +261,8 @@ class _BorrowPageState extends State<BorrowPage> {
                         : filteredItems;
 
                     return GridView.builder(
-                      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                      gridDelegate:
+                          const SliverGridDelegateWithMaxCrossAxisExtent(
                         maxCrossAxisExtent:
                             500.0, // Maximum pixel width of items.
                         crossAxisSpacing: 16.0,
@@ -291,7 +302,6 @@ class _BorrowPageState extends State<BorrowPage> {
                                 ),
                                 Text(
                                   itemsToShow[index].fields.title,
-                                  textAlign: TextAlign.center,
                                   style: const TextStyle(
                                     fontSize: 18.0,
                                     fontWeight: FontWeight.bold,
@@ -301,14 +311,12 @@ class _BorrowPageState extends State<BorrowPage> {
                                 const SizedBox(height: 10),
                                 Text(
                                   itemsToShow[index].fields.author,
-                                  textAlign: TextAlign.center,
                                   style: const TextStyle(
                                     color: Colors.white,
                                   ),
                                 ),
                                 const SizedBox(height: 10),
                                 Text(
-                                    textAlign: TextAlign.center,
                                     itemsToShow[index]
                                                 .fields
                                                 .description
@@ -321,7 +329,6 @@ class _BorrowPageState extends State<BorrowPage> {
                                     )),
                                 const SizedBox(height: 10),
                                 Text(
-                                    textAlign: TextAlign.center,
                                     "Banyak Halaman: ${itemsToShow[index].fields.numPages}",
                                     style: const TextStyle(
                                       color: Colors.white,
@@ -350,12 +357,18 @@ class _BorrowPageState extends State<BorrowPage> {
                                         content: Text(
                                             "Produk baru berhasil disimpan!"),
                                       ));
-                                      Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const BorrowPage()),
-                                      );
+                                      print("MAMSUIKKK");
+                                      List<Product> itemsBaru =
+                                          await fetchItem();
+                                      setState(() {
+                                        itemsToShow = itemsBaru;
+                                      });
+                                      // Navigator.pushReplacement(
+                                      //   context,
+                                      //   MaterialPageRoute(
+                                      //       builder: (context) =>
+                                      //           const BorrowPage()),
+                                      // );
                                     } else {
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(const SnackBar(

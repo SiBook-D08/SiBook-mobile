@@ -4,6 +4,7 @@ import 'package:sibook_mobile/screens/borrow.dart';
 import 'package:sibook_mobile/screens/favorite_page.dart';
 import 'package:sibook_mobile/screens/item_list_page.dart';
 import 'package:sibook_mobile/screens/menu.dart';
+import 'package:sibook_mobile/screens/return_book.dart';
 
 class LeftDrawer extends StatelessWidget {
   const LeftDrawer({super.key, required this.title});
@@ -114,6 +115,22 @@ class LeftDrawer extends StatelessWidget {
                   ),
                   (route) => route.settings.name == 'home',
                 );
+              }
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.auto_stories),
+            title: const Text("Balikan Buku"),
+
+            onTap: () {
+              if (title != 'return_review') {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => const BorrowedItemPage()),
+                  (route) => route.settings.name == 'home',
+                );
+              } else {
+                Navigator.pop(context);
               }
             },
           ),

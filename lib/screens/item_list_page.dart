@@ -41,15 +41,15 @@ class _ItemPageState extends State<ItemPage> {
   @override
   Widget build(BuildContext context) {
     Color startColor = Color.fromARGB(255, 204, 207, 209); // Color to fade
-LinearGradient existingGradient = LinearGradient(
-  begin: Alignment.topLeft,
-  end: Alignment.bottomRight,
-  colors: [
-          Color.fromARGB(255, 0, 11, 0),
-          Color.fromARGB(255, 78, 117, 151),
-          Color.fromARGB(249, 238, 203, 156)
-  ],
-); // Existing background gradient
+    LinearGradient existingGradient = LinearGradient(
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+      colors: [
+        Color.fromARGB(255, 0, 11, 0),
+        Color.fromARGB(255, 78, 117, 151),
+        Color.fromARGB(249, 238, 203, 156)
+      ],
+    ); // Existing background gradient
 
     return Scaffold(
         appBar: AppBar(
@@ -63,9 +63,9 @@ LinearGradient existingGradient = LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
-          Color.fromARGB(255, 0, 11, 0),
-          Color.fromARGB(255, 78, 117, 151),
-          Color.fromARGB(249, 238, 203, 156)
+                    Color.fromARGB(255, 0, 11, 0),
+                    Color.fromARGB(255, 78, 117, 151),
+                    Color.fromARGB(249, 238, 203, 156)
                   ]),
             ),
             child: Column(
@@ -127,57 +127,64 @@ LinearGradient existingGradient = LinearGradient(
                               );
                             },
                             child: Container(
-                              margin: const EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 12),
-                              padding: const EdgeInsets.all(20.0),
-                              child:
-                                Container(
-                                  decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    begin: Alignment.topLeft,
-                                    end: Alignment.bottomRight,
-                                    colors: [
-                                      startColor.withOpacity(1.0), // Start with full opacity
-                                      startColor.withOpacity(0.0), // Fade to transparent
-                                    ],
-                                  ),
-                                ),
-                                child: ShaderMask(
-  shaderCallback: (Rect bounds) {
-    return existingGradient.createShader(bounds);
-  },
-  blendMode: BlendMode.dstIn,
-                                  child: 
-                                  Padding(padding: EdgeInsets.all(4.0), child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    itemsToShow[index].fields.title,
-                                    style: const TextStyle(
-                                      fontSize: 18.0,
-                                      fontWeight: FontWeight.bold,
+                                margin: const EdgeInsets.symmetric(
+                                    horizontal: 16, vertical: 12),
+                                padding: const EdgeInsets.all(20.0),
+                                child: Container(
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
+                                        colors: [
+                                          startColor.withOpacity(
+                                              1.0), // Start with full opacity
+                                          startColor.withOpacity(
+                                              0.0), // Fade to transparent
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(height: 10),
-                                  Text(itemsToShow[index].fields.author),
-                                  const SizedBox(height: 10),
-                                  Text(itemsToShow[index]
-                                              .fields
-                                              .description
-                                              .length >
-                                          200
-                                      ? "${itemsToShow[index].fields.description.substring(0, 201)}..."
-                                      : itemsToShow[index].fields.description),
-                                  const SizedBox(height: 10),
-                                  Text(
-                                      "Banyak Halaman: ${itemsToShow[index].fields.numPages}"),
-                                ],
-                              )
-                                )
-                                )
-                            )
-                            ),
+                                    child: ShaderMask(
+                                        shaderCallback: (Rect bounds) {
+                                          return existingGradient
+                                              .createShader(bounds);
+                                        },
+                                        blendMode: BlendMode.dstIn,
+                                        child: Padding(
+                                            padding: EdgeInsets.all(4.0),
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  itemsToShow[index]
+                                                      .fields
+                                                      .title,
+                                                  style: const TextStyle(
+                                                    fontSize: 18.0,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 10),
+                                                Text(itemsToShow[index]
+                                                    .fields
+                                                    .author),
+                                                const SizedBox(height: 10),
+                                                Text(itemsToShow[index]
+                                                            .fields
+                                                            .description
+                                                            .length >
+                                                        200
+                                                    ? "${itemsToShow[index].fields.description.substring(0, 201)}..."
+                                                    : itemsToShow[index]
+                                                        .fields
+                                                        .description),
+                                                const SizedBox(height: 10),
+                                                Text(
+                                                    "Banyak Halaman: ${itemsToShow[index].fields.numPages}"),
+                                              ],
+                                            ))))),
                           ),
                         );
                       }),
