@@ -20,9 +20,40 @@ class ShopCard extends StatelessWidget {
 
   const ShopCard(this.item, {super.key}); // Constructor
 
+  double _getIconSize(Size screenSize) {
+    final double iconSize;
+
+    if (screenSize.width < 640) {
+      iconSize = 50.0;
+    } else {
+      iconSize = 75.0;
+    }
+
+    return iconSize;
+  }
+
+  double _getFontSize(Size screenSize) {
+    final double fontSize;
+
+    if (screenSize.width < 600) {
+      fontSize = 16.0;
+    } else if (screenSize.width < 640) {
+      fontSize = 18.0;
+    } else {
+      fontSize = 20.0;
+    }
+
+    return fontSize;
+  }
+
 	@override
 	Widget build(BuildContext context) {
 		final request = context.watch<CookieRequest>();
+    
+    final Size screenSize = MediaQuery.sizeOf(context);
+    final double iconSize = _getIconSize(screenSize);
+    final double fontSize = _getFontSize(screenSize);
+
 		return Material(
       color: item.color,
       child: InkWell(
@@ -86,23 +117,25 @@ class ShopCard extends StatelessWidget {
           }
         }
         },
-        child: SingleChildScrollView(
         child: Column(
           // crossAxisAlignment: CrossAxisAlignment.center,
-          // mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Icon(
               item.icon,
               color: Colors.white,
-              size: 100.0,
+              size: iconSize,
             ),
             Text(
               item.name,
-              style: const TextStyle(color: Colors.white),
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: fontSize,
+              ),
+              textAlign: TextAlign.center,
             ),
           ],
         ),
-      )
 
       ),
 		);

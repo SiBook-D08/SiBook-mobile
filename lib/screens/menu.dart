@@ -16,6 +16,8 @@ class MyHomePage extends StatelessWidget {
 
 	@override
 	Widget build(BuildContext context) {
+    final Size screenSize = MediaQuery.sizeOf(context);
+
 		return Scaffold(
       appBar: AppBar(
         title: const Center(
@@ -54,7 +56,7 @@ class MyHomePage extends StatelessWidget {
                 padding: const EdgeInsets.all(20),
                 crossAxisSpacing: 10,
                 mainAxisSpacing: 10,
-                crossAxisCount: 3,
+                crossAxisCount: (screenSize.width < 480) ? 2 : 3,
                 shrinkWrap: true,
                 children: items.map((ShopItem item) {
                   // Iterasi untuk setiap item
