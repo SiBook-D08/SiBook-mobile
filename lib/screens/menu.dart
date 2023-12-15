@@ -12,6 +12,7 @@ class MyHomePage extends StatelessWidget {
     ShopItem("Borrow", Icons.book, const Color.fromARGB(255, 29, 52, 115)),
     ShopItem("Favorit", Icons.bookmark, const Color.fromARGB(255, 8, 67, 232)),
     ShopItem("Return",Icons.auto_stories, Color.fromARGB(255, 26, 167, 169)),
+    ShopItem("Reviews", Icons.archive_rounded,Color.fromARGB(255, 20, 158, 126)),
 	];
 
 	@override

@@ -107,6 +107,12 @@ class _BorrowedItemPageState extends State<BorrowedItemPage> {
               style: TextButton.styleFrom(
                 textStyle: Theme.of(context).textTheme.labelLarge,
               ),
+              child: const Text('Close'),
+              onPressed:  () async {Navigator.of(context).pop();}),
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
               child: const Text('Return Book'),
               onPressed:  () async {
                 
@@ -181,6 +187,7 @@ class _BorrowedItemPageState extends State<BorrowedItemPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Color.fromRGBO(3, 2, 46, 1),
         appBar: AppBar(
           title: const Text('Borrowed Books'),
         ),
@@ -205,6 +212,7 @@ class _BorrowedItemPageState extends State<BorrowedItemPage> {
                       itemBuilder: (_, index) => Container(
                         
                         child: Container(
+                          color: Color.fromARGB(255, 2, 57, 101),
                           margin: const EdgeInsets.symmetric(
                               horizontal: 16, vertical: 12),
                           padding: const EdgeInsets.all(20.0),
@@ -217,15 +225,25 @@ class _BorrowedItemPageState extends State<BorrowedItemPage> {
                                 style: const TextStyle(
                                   fontSize: 18.0,
                                   fontWeight: FontWeight.bold,
+                                  color: Color.fromARGB(255, 255, 160, 234),
                                 ),
                               ),
                               const SizedBox(height: 10),
-                              Text("Id: ${userBorrowed.keys.elementAt(index)}"),
+                              Text("Id: ${userBorrowed.keys.elementAt(index)}",
+                              style: const TextStyle(
+                                  color : Colors.white,
+                                ),),
                               const SizedBox(height: 10),
-                              Text("Penulis: ${userBorrowed.values.elementAt(index).fields.author}"),
+                              Text("Penulis: ${userBorrowed.values.elementAt(index).fields.author}",
+                              style: const TextStyle(
+                                  color : Colors.white,
+                                ),),
                               const SizedBox(height: 10),
                               Text(
-                                  "Banyak Halaman: ${userBorrowed.values.elementAt(index).fields.numPages}"),
+                                  "Banyak Halaman: ${userBorrowed.values.elementAt(index).fields.numPages}",
+                                  style: const TextStyle(
+                                  color : Colors.white,
+                                ),),
                                 Align(
                                   alignment: Alignment.bottomCenter,
                                   child: Padding(

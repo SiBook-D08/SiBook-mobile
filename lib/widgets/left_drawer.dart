@@ -5,6 +5,7 @@ import 'package:sibook_mobile/screens/favorite_page.dart';
 import 'package:sibook_mobile/screens/item_list_page.dart';
 import 'package:sibook_mobile/screens/menu.dart';
 import 'package:sibook_mobile/screens/return_book.dart';
+import 'package:sibook_mobile/screens/review_list.dart';
 
 class LeftDrawer extends StatelessWidget {
   const LeftDrawer({super.key, required this.title});
@@ -122,15 +123,18 @@ class LeftDrawer extends StatelessWidget {
             leading: const Icon(Icons.auto_stories),
             title: const Text("Balikan Buku"),
 
-            onTap: () {
-              if (title != 'return_review') {
+            // ketika diklik akan ke page peminjaman buku
+            onTap: () async {
+              await Navigator.maybePop(context);
+              if (context.mounted && title != 'return_review') {
                 Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => const BorrowedItemPage()),
+                  MaterialPageRoute(
+                    settings: const RouteSettings(name: 'return_review'),
+                    builder: (context) => const BorrowedItemPage(),
+                  ),
                   (route) => route.settings.name == 'home',
                 );
-              } else {
-                Navigator.pop(context);
               }
             },
           ),
@@ -147,6 +151,25 @@ class LeftDrawer extends StatelessWidget {
                   MaterialPageRoute(
                     settings: const RouteSettings(name: 'favorite'),
                     builder: (context) => const FavoritePage(),
+                  ),
+                  (route) => route.settings.name == 'home',
+                );
+              }
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.archive_rounded),
+            title: const Text("Reviews"),
+
+            // ketika diklik akan ke list item
+            onTap: () async {
+              await Navigator.maybePop(context);
+              if (context.mounted && title != 'all_review') {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    settings: const RouteSettings(name: 'all_review'),
+                    builder: (context) => const ReviewPage(),
                   ),
                   (route) => route.settings.name == 'home',
                 );

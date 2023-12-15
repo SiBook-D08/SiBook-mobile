@@ -7,6 +7,7 @@ import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:sibook_mobile/screens/add_item_form.dart';
 import 'package:sibook_mobile/screens/return_book.dart';
+import 'package:sibook_mobile/screens/review_list.dart';
 
 class ShopItem {
   final String name;
@@ -84,12 +85,21 @@ class ShopCard extends StatelessWidget {
             ));
         } else if (item.name == "Return"){
         Navigator.push(context,
-					MaterialPageRoute(builder: (context) => const BorrowedItemPage()));
+					MaterialPageRoute(
+              settings: const RouteSettings(name: 'return_review'),
+              builder: (context) => const BorrowedItemPage(),
+            ));
       } else if (item.name == "Favorit") {
             Navigator.push(context,
               MaterialPageRoute(
                 settings: const RouteSettings(name: 'favorite'),
                 builder: (context) => const FavoritePage(),
+              ));
+        }else if (item.name == "Reviews") {
+            Navigator.push(context,
+              MaterialPageRoute(
+                settings: const RouteSettings(name: 'all_review'),
+                builder: (context) => const ReviewPage(),
               ));
         } else if (item.name == "Logout") {
           final response = await request.logout(

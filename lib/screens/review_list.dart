@@ -1,4 +1,5 @@
 import 'package:sibook_mobile/models/product.dart';
+import 'package:sibook_mobile/models/review.dart';
 import 'package:sibook_mobile/screens/oneitem.dart';
 import 'package:sibook_mobile/screens/login.dart';
 import 'package:flutter/material.dart';
@@ -17,98 +18,139 @@ class ReviewPage extends StatefulWidget {
 }
 
 class _ReviewPageState extends State<ReviewPage> {
-  Future<List<Product>> fetchItem() async {
-    // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
-    var url = Uri.parse('http://127.0.0.1:8000/json/');
-    var response = await http.get(
-      url,
-      headers: {"Content-Type": "application/json"},
-    );
+  //Store reviews
+  Map<Product,Review> userReviews={}; 
 
-    // melakukan decode response menjadi bentuk json
-    var data = jsonDecode(utf8.decode(response.bodyBytes));
+  Future<Product> fetchBook(int id) async {
+    var url = Uri.parse('http://127.0.0.1:8000/borrow/get-book-data/${id}');
+    var response =
+        await http.get(url, headers: {"Content-Type": "application/json"});
+
+    if (response.statusCode == 200) {
+      var data = json.decode(utf8.decode(response.bodyBytes));
+      return Product.fromJson(
+          data[0]); // Assuming Book is the model representing your data
+    } else {
+      throw Exception(
+          'Failed to load book. Status code: ${response.statusCode}');
+    }
+  }
+
+  Future<String> fetchUser(int idx) async{
+    var url= Uri.parse('http://127.0.0.1:8000/returnBook/get-user-data/${idx}');
+    var response =
+        await http.get(url, headers: {"Content-Type": "application/json"});
+    
+    if(response.statusCode==200){
+      var data = json.decode(utf8.decode(response.bodyBytes));
+      List<String> temp=data[0].toString().split(",");
+      return temp[5].replaceAll("username: ","");
+    }else{
+      throw Exception(
+          'Failed to load book. Status code: ${response.statusCode}');
+    }
+  }
+
+  Future<Map<Product,Review>> fetchBorrowed() async {
+    CookieRequest request = Provider.of<CookieRequest>(context, listen: false);
+
+    // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
+
+    var response = await request.get('http://127.0.0.1:8000/returnBook/user-reviews/get-reviews-experimental/');
+
     // melakukan konversi data json menjadi object Item
-    List<Product> list_Item = [];
-    for (var d in data) {
-      if (d != null) {
-        list_Item.add(Product.fromJson(d));
+    Map<Product,Review> allReviews = {};
+
+    if (response != null) {
+      for (var d in response) {
+        if (d != null) {
+          int bookId = Review.fromJson(d).fields.book;
+          Product buku = await fetchBook(bookId);
+          Review tempReview=Review.fromJson(d);
+          allReviews.addAll({buku:tempReview});
+        }
       }
     }
-    return list_Item;
+    return allReviews;
+  }
+
+  FutureBuilder<String> buildUsernameFuture(int userIdx) {
+    return FutureBuilder<String>(
+      future: fetchUser(userIdx),
+      builder: (context, AsyncSnapshot<String> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Text('Loading username...');
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else {
+          return Text('✾ From: ${snapshot.data}',
+            style: const TextStyle(
+              color: Colors.white,
+            ),
+          );
+        }
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Color.fromRGBO(3, 2, 46, 1),
         appBar: AppBar(
-          title: const Text('All User Reviews'),
+          title: const Text('User Reviews'),
         ),
-        drawer: const LeftDrawer(title: '',),
-        body: FutureBuilder(
-            future: fetchItem(),
-            builder: (context, AsyncSnapshot snapshot) {
-              if (!snapshot.hasData || snapshot.data.isEmpty) {
-                  return Column(
-                    children: [
-                      Container(
-                        margin: EdgeInsets.all(16),
-                        padding: EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Color(0xff59A5D8)),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Column(
-                          children: [
-                            Text(
-                              """userx,
-No reviews yet""",
-                              style: TextStyle(color: Color(0xff59A5D8), fontSize: 20),
-                            ),
-                            SizedBox(height: 8),
-                          ],
-                        ),
-                      ),
-                    ],
-                  );
-              } else {
-                return ListView.builder(
-                  itemCount: snapshot.data!.length,
-                  itemBuilder: (_, index) => InkWell(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ItemDetailPage(
-                                    item: snapshot.data![index],
-                                  )));
-                    },
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 12),
-                      padding: const EdgeInsets.all(20.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "${snapshot.data![index].fields.name}",
-                            style: const TextStyle(
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
-                            ),
+        drawer: const LeftDrawer(title: 'all_review'),
+        body: Column(
+          children: [
+            Expanded(
+              child: FutureBuilder(
+                  future: fetchBorrowed(),
+                  builder: (context, AsyncSnapshot snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    if (snapshot.hasError) {
+                      return Center(child: Text('Error: ${snapshot.error}'));
+                    }
+
+                    userReviews = snapshot.data;
+
+                    return ListView.builder(
+                      itemCount: userReviews.length,
+                      itemBuilder: (_, index) => Container(
+                        
+                        child: Container(
+                          color: Color.fromARGB(255, 2, 57, 101),
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 12),
+                          padding: const EdgeInsets.all(20.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                userReviews.keys.elementAt(index).fields.title,
+                                style: const TextStyle(
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color.fromARGB(255, 255, 160, 234),
+                                ),
+                              ),
+                              buildUsernameFuture(userReviews.values.elementAt(index).fields.user),
+                              const SizedBox(height: 10),
+                              Text(userReviews.values.elementAt(index).fields.review,
+                              style: const TextStyle(
+                                  color : Colors.white,
+                                ),),
+                            ],
                           ),
-                          const SizedBox(height: 10),
-                          Text("${snapshot.data![index].fields.price}"),
-                          const SizedBox(height: 10),
-                          Text("${snapshot.data![index].fields.amount}"),
-                          const SizedBox(height: 10),
-                          Text("${snapshot.data![index].fields.description}"),
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
-                );
-              }
-            }));
+                    );
+                  }),
+            ),
+          ],
+        ));
   }
 }
