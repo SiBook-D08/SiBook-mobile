@@ -1,4 +1,5 @@
 import 'package:sibook_mobile/models/product.dart';
+import 'package:sibook_mobile/models/favorite.dart';
 import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
 import 'package:http/http.dart' as http;
@@ -21,8 +22,8 @@ class _FavoritePageState extends State<FavoritePage> {
 
   TextEditingController searchController = TextEditingController();
   List<Product> nonFavoritedBooks = [];
-  List<Product> FavoritedBooks = [];
   List<Product> filteredItems = [];
+  Map<Product, Favorite> favoritedBooks = {};
 
   Future<List<Product>> fetchNonFavorited() async {
     var url = Uri.parse('http://127.0.0.1:8000/favorite/get-books/');
@@ -43,23 +44,39 @@ class _FavoritePageState extends State<FavoritePage> {
     return listItem;
   }
 
-  Future<List<Product>> fetchFavorited() async {
-    var url = Uri.parse('http://127.0.0.1:8000/favorite/get-favorited-books//');
-    var response = await http.get(
-      url,
-      headers: {"Content-Type": "application/json"},
-    );
+  Future<Map<Product, Favorite>> fetchFavorited() async {
+    CookieRequest request = Provider.of<CookieRequest>(context, listen: false);
+    var response = await request
+        .get('http://127.0.0.1:8000/favorite/get-favorited-flutter/');
 
-    // melakukan decode response menjadi bentuk json
-    var data = jsonDecode(utf8.decode(response.bodyBytes));
-    // melakukan konversi data json menjadi object Item
-    List<Product> listItem = [];
-    for (var d in data) {
-      if (d != null) {
-        listItem.add(Product.fromJson(d));
+    Map<Product, Favorite> allFavorited = {};
+    if (response != null) {
+      for (var d in response) {
+        if (d != null) {
+          int bookId = Favorite.fromJson(d).fields.book;
+          Product bookData = await fetchBookById(bookId);
+          Favorite tmpFavorite = Favorite.fromJson(d);
+          allFavorited.addAll({bookData: tmpFavorite});
+        }
       }
     }
-    return listItem;
+
+    return allFavorited;
+  }
+
+  Future<Product> fetchBookById(int id) async {
+    var url = Uri.parse('http://localhost:8000/favorite/get-book-data/$id');
+    var response =
+        await http.get(url, headers: {"Content-Type": "application/json"});
+
+    if (response.statusCode == 200) {
+      var data = json.decode(utf8.decode(response.bodyBytes));
+      return Product.fromJson(
+          data[0]); // Assuming Book is the model representing your data
+    } else {
+      throw Exception(
+          'Failed to load book. Status code: ${response.statusCode}');
+    }
   }
 
   @override
@@ -92,6 +109,119 @@ class _FavoritePageState extends State<FavoritePage> {
                           .contains(value.toLowerCase());
                     }).toList();
                   });
+                },
+              ),
+            ),
+            Expanded(
+              child: FutureBuilder(
+                future: fetchFavorited(),
+                builder: (context, AsyncSnapshot snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  }
+
+                  favoritedBooks = snapshot.data;
+
+                  return Column(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          children: [
+                            Text(
+                              "Buku yang telah kamu favoritkan",
+                              style: const TextStyle(
+                                fontSize:
+                                    20.0, // Adjust the font size as needed
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Expanded(
+                              child: ListView.builder(
+                                itemCount: favoritedBooks.length,
+                                itemBuilder: (_, index) => InkWell(
+                                  child: Container(
+                                    margin: const EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                      vertical: 8,
+                                    ),
+                                    padding: const EdgeInsets.all(20.0),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          favoritedBooks.keys
+                                              .elementAt(index)
+                                              .fields
+                                              .title,
+                                          textAlign: TextAlign.left,
+                                          style: const TextStyle(
+                                            fontSize: 14.0,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Text(
+                                          favoritedBooks.values
+                                              .elementAt(index)
+                                              .fields
+                                              .alasan,
+                                          textAlign: TextAlign.left,
+                                          style: const TextStyle(
+                                            fontSize: 14.0,
+                                          ),
+                                        ),
+                                        SizedBox(height: 5),
+                                        ElevatedButton(
+                                          onPressed: () async {
+                                            final response = await request.postJson(
+                                                'http://localhost:8000/favorite/remove-from-favorited-flutter/${favoritedBooks.values.elementAt(index).pk}/',
+                                                jsonEncode(<String, String>{
+                                                  'bookId': favoritedBooks.keys
+                                                      .elementAt(index)
+                                                      .pk
+                                                      .toString(),
+                                                }));
+
+                                            if (response['status'] ==
+                                                'success') {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(const SnackBar(
+                                                content: Text(
+                                                    "Buku berhasil dihapus dari favorit!"),
+                                              ));
+                                              Navigator.pushReplacement(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        FavoritePage()),
+                                              );
+                                            } else {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(const SnackBar(
+                                                content: Text(
+                                                    "Terdapat kesalahan, silakan coba lagi."),
+                                              ));
+                                            }
+                                          },
+                                          child:
+                                              const Text('Hapus dari Favorit'),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  );
                 },
               ),
             ),
