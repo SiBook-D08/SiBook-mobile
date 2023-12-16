@@ -11,8 +11,38 @@ class LeftDrawer extends StatelessWidget {
 
   final String title;
 
+  double _getIconSize(Size screenSize) {
+    final double iconSize;
+
+    if (screenSize.width < 640) {
+      iconSize = 25.0;
+    } else {
+      iconSize = 30.0;
+    }
+
+    return iconSize;
+  }
+
+  double _getFontSize(Size screenSize) {
+    final double fontSize;
+
+    if (screenSize.width < 600) {
+      fontSize = 16.0;
+    } else if (screenSize.width < 640) {
+      fontSize = 18.0;
+    } else {
+      fontSize = 20.0;
+    }
+
+    return fontSize;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final Size screenSize = MediaQuery.sizeOf(context);
+    final double fontSize = _getFontSize(screenSize);
+    final double iconSize = _getIconSize(screenSize);
+
     return Drawer(
       child: ListView(
         children: [
@@ -43,8 +73,16 @@ class LeftDrawer extends StatelessWidget {
             ),
           ),
           ListTile(
-            leading: const Icon(Icons.home_outlined),
-            title: const Text('Homepage'),
+            leading: Icon(
+              Icons.home_outlined,
+              size: iconSize,
+            ),
+            title: Text(
+              'Homepage',
+              style: TextStyle(
+                fontSize: fontSize,
+              ),
+            ),
 
             //Ketika diklik akan ke homepage
             onTap: () async {
@@ -62,8 +100,16 @@ class LeftDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.add_shopping_cart),
-            title: const Text("Tambah Item"),
+            leading: Icon(
+              Icons.add_shopping_cart,
+              size: iconSize,
+            ),
+            title: Text(
+              'Tambah Item',
+              style: TextStyle(
+                fontSize: fontSize,
+              ),
+            ),
 
             // ketika diklik akan ke forms add_item
             onTap: () async {
@@ -81,8 +127,16 @@ class LeftDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.shopping_bag_outlined),
-            title: const Text("Lihat Item"),
+            leading: Icon(
+              Icons.shopping_bag_outlined,
+              size: iconSize,
+            ),
+            title: Text(
+              'Lihat Item',
+              style: TextStyle(
+                fontSize: fontSize,
+              ),
+            ),
 
             // ketika diklik akan ke list item
             onTap: () async {
@@ -100,8 +154,16 @@ class LeftDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.shopping_bag_outlined),
-            title: const Text("Pinjam Buku"),
+            leading: Icon(
+              Icons.shopping_bag_outlined,
+              size: iconSize,
+            ),
+            title: Text(
+              'Pinjam Buku',
+              style: TextStyle(
+                fontSize: fontSize,
+              ),
+            ),
 
             // ketika diklik akan ke page peminjaman buku
             onTap: () async {
@@ -119,8 +181,16 @@ class LeftDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.auto_stories),
-            title: const Text("Balikan Buku"),
+            leading: Icon(
+              Icons.auto_stories,
+              size: iconSize,
+            ),
+            title: Text(
+              'Kembalikan Buku',
+              style: TextStyle(
+                fontSize: fontSize,
+              ),
+            ),
 
             onTap: () {
               if (title != 'return_review') {
@@ -135,8 +205,16 @@ class LeftDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.bookmark),
-            title: const Text("Favoritkan Buku"),
+            leading: Icon(
+              Icons.bookmark,
+              size: iconSize,
+            ),
+            title: Text(
+              'Favoritkan Buku',
+              style: TextStyle(
+                fontSize: fontSize,
+              ),
+            ),
 
             // ketika diklik akan ke list item
             onTap: () async {
