@@ -15,10 +15,10 @@ class LeftDrawer extends StatelessWidget {
   double _getIconSize(Size screenSize) {
     final double iconSize;
 
-    if (screenSize.width < 640) {
-      iconSize = 25.0;
+    if (screenSize.width < 600) {
+      iconSize = 20.0;
     } else {
-      iconSize = 30.0;
+      iconSize = 25.0;
     }
 
     return iconSize;
@@ -29,10 +29,8 @@ class LeftDrawer extends StatelessWidget {
 
     if (screenSize.width < 600) {
       fontSize = 16.0;
-    } else if (screenSize.width < 640) {
-      fontSize = 18.0;
     } else {
-      fontSize = 20.0;
+      fontSize = 18.0;
     }
 
     return fontSize;
@@ -112,7 +110,7 @@ class LeftDrawer extends StatelessWidget {
               ),
             ),
 
-            // ketika diklik akan ke forms add_item
+            // ketika diklik akan ke page add_item
             onTap: () async {
               await Navigator.maybePop(context);
               if (context.mounted && title != 'donate') {
@@ -193,7 +191,7 @@ class LeftDrawer extends StatelessWidget {
               ),
             ),
 
-            // ketika diklik akan ke page peminjaman buku
+            // ketika diklik akan ke page pengembalian buku
             onTap: () async {
               await Navigator.maybePop(context);
               if (context.mounted && title != 'return_review') {
@@ -220,7 +218,7 @@ class LeftDrawer extends StatelessWidget {
               ),
             ),
 
-            // ketika diklik akan ke list item
+            // ketika diklik akan ke page favorite
             onTap: () async {
               await Navigator.maybePop(context);
               if (context.mounted && title != 'favorite') {
@@ -236,10 +234,18 @@ class LeftDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.archive_rounded),
-            title: const Text("Reviews"),
+            leading: Icon(
+              Icons.archive_rounded,
+              size: iconSize,
+            ),
+            title: Text(
+              'Reviews',
+              style: TextStyle(
+                fontSize: fontSize,
+              ),
+            ),
 
-            // ketika diklik akan ke list item
+            // ketika diklik akan ke page review list
             onTap: () async {
               await Navigator.maybePop(context);
               if (context.mounted && title != 'all_review') {

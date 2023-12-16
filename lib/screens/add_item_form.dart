@@ -68,7 +68,12 @@ class _AddItemFormState extends State<AddItemForm> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.only(
+                      left: 20.0,
+                      right: 20.0,
+                      top: 10.0,
+                      bottom: 10.0,
+                    ),
                     child: TextFormField(
                       controller: _titleCtrl,
                       style: const TextStyle(color: Color.fromARGB(255, 243, 231, 231)),
@@ -88,7 +93,12 @@ class _AddItemFormState extends State<AddItemForm> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.only(
+                      left: 20.0,
+                      right: 20.0,
+                      top: 10.0,
+                      bottom: 10.0,
+                    ),
                     child: TextFormField(
                       controller: _authorCtrl,
                       style: const TextStyle(color: Color.fromARGB(255, 243, 231, 231)),
@@ -110,7 +120,12 @@ class _AddItemFormState extends State<AddItemForm> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.only(
+                      left: 20.0,
+                      right: 20.0,
+                      top: 10.0,
+                      bottom: 10.0,
+                    ),
                     child: TextFormField(
                       controller: _pageCountCtrl,
                       style: const TextStyle(color: Color.fromARGB(255, 243, 231, 231)),
@@ -135,7 +150,12 @@ class _AddItemFormState extends State<AddItemForm> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.only(
+                      left: 20.0,
+                      right: 20.0,
+                      top: 10.0,
+                      bottom: 10.0,
+                    ),
                     child: TextFormField(
                       controller: _descCtrl,
                       style: const TextStyle(color: Color.fromARGB(255, 243, 231, 231)),
@@ -159,7 +179,12 @@ class _AddItemFormState extends State<AddItemForm> {
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.only(
+                        left: 20.0,
+                        right: 20.0,
+                        top: 10.0,
+                        bottom: 10.0,
+                      ),
                       child: ElevatedButton(
                         style: ButtonStyle(
                           backgroundColor:
