@@ -45,13 +45,17 @@ class _FavoritePageState extends State<FavoritePage> {
   }
 
   Future<Map<Product, Favorite>> fetchFavorited() async {
-    CookieRequest request = Provider.of<CookieRequest>(context, listen: false);
-    var response = await request
-        .get('http://127.0.0.1:8000/favorite/get-favorited-flutter/');
+    var url =
+        Uri.parse('http://127.0.0.1:8000/favorite/get-favorited-flutter/');
+    var response = await http.get(
+      url,
+      headers: {"Content-Type": "application/json"},
+    );
+    var data = jsonDecode(utf8.decode(response.bodyBytes));
 
     Map<Product, Favorite> allFavorited = {};
-    if (response != null) {
-      for (var d in response) {
+    if (data != null) {
+      for (var d in data) {
         if (d != null) {
           int bookId = Favorite.fromJson(d).fields.book;
           Product bookData = await fetchBookById(bookId);
@@ -178,14 +182,16 @@ class _FavoritePageState extends State<FavoritePage> {
                                         SizedBox(height: 5),
                                         ElevatedButton(
                                           onPressed: () async {
-                                            final response = await request.postJson(
-                                                'http://localhost:8000/favorite/remove-from-favorited-flutter/${favoritedBooks.values.elementAt(index).pk}/',
-                                                jsonEncode(<String, String>{
-                                                  'bookId': favoritedBooks.keys
-                                                      .elementAt(index)
-                                                      .pk
-                                                      .toString(),
-                                                }));
+                                            final response =
+                                                await request.postJson(
+                                              'http://localhost:8000/favorite/remove-from-favorited-flutter/${favoritedBooks.values.elementAt(index).pk}/',
+                                              jsonEncode(<String, String>{
+                                                'bookId': favoritedBooks.keys
+                                                    .elementAt(index)
+                                                    .pk
+                                                    .toString(),
+                                              }),
+                                            );
 
                                             if (response['status'] ==
                                                 'success') {
