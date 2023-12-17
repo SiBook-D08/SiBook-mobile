@@ -184,7 +184,7 @@ class _BorrowPageState extends State<BorrowPage> {
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(const SnackBar(
                                               content: Text(
-                                                  "Produk baru berhasil disimpan!"),
+                                                  "Berhasil dikeluarkan dari keranjang"),
                                             ));
                                             // ignore: use_build_context_synchronously
                                             List<Product> cartData =
@@ -223,7 +223,7 @@ class _BorrowPageState extends State<BorrowPage> {
                           // ignore: use_build_context_synchronously
                           ScaffoldMessenger.of(context)
                               .showSnackBar(const SnackBar(
-                            content: Text("Produk baru berhasil disimpan!"),
+                            content: Text("Buku berhasil dipinjam!"),
                           ));
 
                           setState(() {
@@ -358,7 +358,7 @@ class _BorrowPageState extends State<BorrowPage> {
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(const SnackBar(
                                         content: Text(
-                                            "Produk baru berhasil disimpan!"),
+                                            "Berhasil memasukkan ke keranjang!"),
                                       ));
                                       print("MAMSUIKKK");
                                       List<Product> itemsBaru =

@@ -33,6 +33,7 @@ class _AddItemFormState extends State<AddItemForm> {
   Widget build(BuildContext context) {
     final request = context.watch<CookieRequest>();
     return Scaffold(
+      backgroundColor: Color.fromRGBO(3, 2, 46, 1),
       appBar: AppBar(
         title: const Center(
           child: Text(
@@ -49,17 +50,7 @@ class _AddItemFormState extends State<AddItemForm> {
       //nampilin body page
       body: Container(
         alignment: Alignment.center,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color.fromARGB(255, 0, 11, 0),
-              Color.fromARGB(255, 78, 117, 151),
-              Color.fromARGB(249, 238, 203, 156),
-            ],
-          ),
-        ),
+        
         child: Center(
           child: Form(
             key: _formKey,
