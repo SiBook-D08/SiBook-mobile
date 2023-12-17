@@ -95,7 +95,7 @@ class _ItemDetailPageState extends State<ItemDetailPage> {
                           if (context.mounted && response['status'] == 'success') {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
-                                content: Text("Account has been successfully registered!"),
+                                content: Text("Deskripsi Berhasil Diedit!"),
                               ),
                             );
                             Navigator.pushReplacement(
