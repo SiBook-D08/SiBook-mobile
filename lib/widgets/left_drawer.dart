@@ -208,7 +208,7 @@ class LeftDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(
-              Icons.bookmark,
+              Icons.bookmark_outline,
               size: iconSize,
             ),
             title: Text(

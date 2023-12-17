@@ -18,7 +18,7 @@ class FavoritePage extends StatefulWidget {
 
 class _FavoritePageState extends State<FavoritePage> {
   final _formKey = GlobalKey<FormState>();
-  String _alasan = "";
+  final _alasanController = TextEditingController();
 
   TextEditingController searchController = TextEditingController();
   List<Product> nonFavoritedBooks = [];
@@ -87,8 +87,11 @@ class _FavoritePageState extends State<FavoritePage> {
   Widget build(BuildContext context) {
     final request = context.watch<CookieRequest>();
     return Scaffold(
+        backgroundColor: const Color.fromRGBO(3, 2, 46, 1),
         appBar: AppBar(
           title: const Text('Favorit'),
+          foregroundColor: Colors.white,
+          backgroundColor: const Color.fromARGB(255, 0, 0, 0),
         ),
         drawer: const LeftDrawer(title: 'Favorit'),
         body: Column(
@@ -96,10 +99,13 @@ class _FavoritePageState extends State<FavoritePage> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextField(
+                style: const TextStyle(color: Colors.white),
                 controller: searchController,
                 decoration: InputDecoration(
                   labelText: 'Search',
+                  labelStyle: const TextStyle(color: Colors.white),
                   hintText: 'Search for items...',
+                  hintStyle: const TextStyle(color: Colors.white),
                   prefixIcon: const Icon(Icons.search),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
@@ -132,100 +138,106 @@ class _FavoritePageState extends State<FavoritePage> {
                   return Column(
                     children: [
                       Expanded(
-                        child: Column(
-                          children: [
-                            Text(
-                              "Buku yang telah kamu favoritkan",
-                              style: const TextStyle(
-                                fontSize:
-                                    20.0, // Adjust the font size as needed
-                                fontWeight: FontWeight.bold,
+                        child: Container(
+                          // color: Colors.white,
+                          child: Column(
+                            children: [
+                              const Text(
+                                "Buku yang telah kamu favoritkan",
+                                style: TextStyle(
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
                               ),
-                            ),
-                            Expanded(
-                              child: ListView.builder(
-                                itemCount: favoritedBooks.length,
-                                itemBuilder: (_, index) => InkWell(
-                                  child: Container(
-                                    margin: const EdgeInsets.symmetric(
-                                      horizontal: 16,
-                                      vertical: 8,
-                                    ),
-                                    padding: const EdgeInsets.all(20.0),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          favoritedBooks.keys
-                                              .elementAt(index)
-                                              .fields
-                                              .title,
-                                          textAlign: TextAlign.left,
-                                          style: const TextStyle(
-                                            fontSize: 14.0,
-                                            fontWeight: FontWeight.bold,
+                              Expanded(
+                                child: ListView.builder(
+                                  itemCount: favoritedBooks.length,
+                                  itemBuilder: (_, index) => InkWell(
+                                    child: Container(
+                                      color:
+                                          const Color.fromARGB(255, 2, 57, 101),
+                                      margin: const EdgeInsets.symmetric(
+                                        horizontal: 16,
+                                        vertical: 8,
+                                      ),
+                                      padding: const EdgeInsets.all(20.0),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            favoritedBooks.keys
+                                                .elementAt(index)
+                                                .fields
+                                                .title,
+                                            textAlign: TextAlign.left,
+                                            style: const TextStyle(
+                                              fontSize: 14.0,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white,
+                                            ),
                                           ),
-                                        ),
-                                        Text(
-                                          favoritedBooks.values
-                                              .elementAt(index)
-                                              .fields
-                                              .alasan,
-                                          textAlign: TextAlign.left,
-                                          style: const TextStyle(
-                                            fontSize: 14.0,
+                                          Text(
+                                            "Kamu memfavoritkan buku ini karena ${favoritedBooks.values.elementAt(index).fields.alasan}",
+                                            textAlign: TextAlign.left,
+                                            style: const TextStyle(
+                                              fontSize: 14.0,
+                                              color: Colors.white,
+                                            ),
                                           ),
-                                        ),
-                                        SizedBox(height: 5),
-                                        ElevatedButton(
-                                          onPressed: () async {
-                                            final response =
-                                                await request.postJson(
-                                              'http://localhost:8000/favorite/remove-from-favorited-flutter/${favoritedBooks.values.elementAt(index).pk}/',
-                                              jsonEncode(<String, String>{
-                                                'bookId': favoritedBooks.keys
-                                                    .elementAt(index)
-                                                    .pk
-                                                    .toString(),
-                                              }),
-                                            );
-
-                                            if (response['status'] ==
-                                                'success') {
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(const SnackBar(
-                                                content: Text(
-                                                    "Buku berhasil dihapus dari favorit!"),
-                                              ));
-                                              Navigator.pushReplacement(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        FavoritePage()),
+                                          const SizedBox(height: 5),
+                                          ElevatedButton(
+                                            onPressed: () async {
+                                              final response =
+                                                  await request.postJson(
+                                                'http://localhost:8000/favorite/remove-from-favorited-flutter/${favoritedBooks.values.elementAt(index).pk}/',
+                                                jsonEncode(<String, String>{
+                                                  'bookId': favoritedBooks.keys
+                                                      .elementAt(index)
+                                                      .pk
+                                                      .toString(),
+                                                }),
                                               );
-                                            } else {
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(const SnackBar(
-                                                content: Text(
-                                                    "Terdapat kesalahan, silakan coba lagi."),
-                                              ));
-                                            }
-                                          },
-                                          child:
-                                              const Text('Hapus dari Favorit'),
-                                        ),
-                                      ],
+
+                                              if (response['status'] ==
+                                                  'success') {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                        const SnackBar(
+                                                  content: Text(
+                                                      "Buku berhasil dihapus dari favorit!"),
+                                                ));
+                                                Navigator.pushReplacement(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          const FavoritePage()),
+                                                );
+                                              } else {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                        const SnackBar(
+                                                  content: Text(
+                                                      "Terdapat kesalahan, silakan coba lagi."),
+                                                ));
+                                              }
+                                            },
+                                            child: const Text(
+                                                'Hapus dari Favorit'),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
+                      )
                     ],
                   );
                 },
@@ -252,6 +264,7 @@ class _FavoritePageState extends State<FavoritePage> {
                       itemBuilder: (_, index) => InkWell(
                         onTap: () {},
                         child: Container(
+                          color: const Color.fromARGB(255, 2, 57, 101),
                           margin: const EdgeInsets.symmetric(
                               horizontal: 16, vertical: 12),
                           padding: const EdgeInsets.all(20.0),
@@ -264,21 +277,27 @@ class _FavoritePageState extends State<FavoritePage> {
                                 style: const TextStyle(
                                   fontSize: 18.0,
                                   fontWeight: FontWeight.bold,
+                                  color: Colors.white,
                                 ),
                               ),
                               const SizedBox(height: 10),
-                              Text(itemsToShow[index].fields.author),
-                              const SizedBox(height: 10),
-                              Text(itemsToShow[index]
-                                          .fields
-                                          .description
-                                          .length >
-                                      200
-                                  ? "${itemsToShow[index].fields.description.substring(0, 201)}..."
-                                  : itemsToShow[index].fields.description),
+                              Text(
+                                itemsToShow[index].fields.author,
+                                style: const TextStyle(color: Colors.white),
+                              ),
                               const SizedBox(height: 10),
                               Text(
-                                  "Banyak Halaman: ${itemsToShow[index].fields.numPages}"),
+                                itemsToShow[index].fields.description.length >
+                                        200
+                                    ? "${itemsToShow[index].fields.description.substring(0, 201)}..."
+                                    : itemsToShow[index].fields.description,
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                              const SizedBox(height: 10),
+                              Text(
+                                "Banyak Halaman: ${itemsToShow[index].fields.numPages}",
+                                style: const TextStyle(color: Colors.white),
+                              ),
                               const SizedBox(
                                   height:
                                       20), // Add more space above the button
@@ -293,11 +312,15 @@ class _FavoritePageState extends State<FavoritePage> {
                                               'Mengapa kamu memfavoritkan buku ini?'),
                                           content: Form(
                                               key: _formKey,
-                                              child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
+                                              child: SingleChildScrollView(
+                                                  child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
                                                     TextFormField(
+                                                      controller:
+                                                          _alasanController,
                                                       decoration: InputDecoration(
                                                           hintText:
                                                               "Isi alasanmu disini!",
@@ -307,12 +330,6 @@ class _FavoritePageState extends State<FavoritePage> {
                                                                   BorderRadius
                                                                       .circular(
                                                                           5.0))),
-                                                      onChanged:
-                                                          (String? value) {
-                                                        setState(() {
-                                                          _alasan = value!;
-                                                        });
-                                                      },
                                                       validator:
                                                           (String? value) {
                                                         if (value == null ||
@@ -322,62 +339,71 @@ class _FavoritePageState extends State<FavoritePage> {
                                                         return null;
                                                       },
                                                     ),
-                                                    TextButton(
-                                                      child: const Text(
-                                                          'Favoritkan'),
-                                                      onPressed: () async {
-                                                        if (_formKey
-                                                            .currentState!
-                                                            .validate()) {
-                                                          // Kirim ke Django dan tunggu respons
-                                                          // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
-                                                          final response = await request
-                                                              .postJson(
-                                                                  "http://127.0.0.1:8000/favorite/add-to-favorited-flutter/${itemsToShow[index].pk}/",
-                                                                  jsonEncode(<String,
-                                                                      String>{
-                                                                    'alasan':
-                                                                        _alasan,
-                                                                  }));
-                                                          if (response[
-                                                                  'status'] ==
-                                                              'success') {
-                                                            ScaffoldMessenger
-                                                                    .of(context)
-                                                                .showSnackBar(
-                                                                    const SnackBar(
-                                                              content: Text(
-                                                                  "Kamu telah berhasil memfavoritkan buku baru!"),
-                                                            ));
-                                                            Navigator
-                                                                .pushReplacement(
-                                                              context,
-                                                              MaterialPageRoute(
-                                                                  builder:
-                                                                      (context) =>
-                                                                          FavoritePage()),
-                                                            );
-                                                          } else {
-                                                            ScaffoldMessenger
-                                                                    .of(context)
-                                                                .showSnackBar(
-                                                                    const SnackBar(
-                                                              content: Text(
-                                                                  "Terdapat kesalahan, silakan coba lagi."),
-                                                            ));
-                                                          }
-                                                        }
-                                                      },
+                                                    Row(
+                                                      children: [
+                                                        TextButton(
+                                                          child: const Text(
+                                                              'Favoritkan'),
+                                                          onPressed: () async {
+                                                            if (_formKey
+                                                                .currentState!
+                                                                .validate()) {
+                                                              // Kirim ke Django dan tunggu respons
+                                                              // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
+                                                              final response = await request
+                                                                  .postJson(
+                                                                      "http://127.0.0.1:8000/favorite/add-to-favorited-flutter/${itemsToShow[index].pk}/",
+                                                                      jsonEncode(<String,
+                                                                          String>{
+                                                                        'alasan':
+                                                                            _alasanController.text,
+                                                                      }));
+                                                              if (response[
+                                                                      'status'] ==
+                                                                  'success') {
+                                                                _alasanController
+                                                                    .dispose();
+                                                                ScaffoldMessenger.of(
+                                                                        context)
+                                                                    .showSnackBar(
+                                                                        const SnackBar(
+                                                                  content: Text(
+                                                                      "Kamu telah berhasil memfavoritkan buku baru!"),
+                                                                ));
+                                                                Navigator
+                                                                    .pushReplacement(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                      builder:
+                                                                          (context) =>
+                                                                              FavoritePage()),
+                                                                );
+                                                              } else {
+                                                                ScaffoldMessenger.of(
+                                                                        context)
+                                                                    .showSnackBar(
+                                                                        const SnackBar(
+                                                                  content: Text(
+                                                                      "Terdapat kesalahan, silakan coba lagi."),
+                                                                ));
+                                                              }
+                                                            }
+                                                          },
+                                                        ),
+                                                        TextButton(
+                                                          child: const Text(
+                                                              'Batalkan'),
+                                                          onPressed: () {
+                                                            _alasanController
+                                                                .clear();
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop(); // Close the dialog
+                                                          },
+                                                        ),
+                                                      ],
                                                     ),
-                                                    TextButton(
-                                                      child: const Text(
-                                                          'Batalkan'),
-                                                      onPressed: () {
-                                                        Navigator.of(context)
-                                                            .pop(); // Close the dialog
-                                                      },
-                                                    ),
-                                                  ])));
+                                                  ]))));
                                     },
                                   );
                                 },
