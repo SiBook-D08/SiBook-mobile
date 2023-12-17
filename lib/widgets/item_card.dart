@@ -47,85 +47,91 @@ class ShopCard extends StatelessWidget {
     return fontSize;
   }
 
-	@override
-	Widget build(BuildContext context) {
-		final request = context.watch<CookieRequest>();
-    
+  @override
+  Widget build(BuildContext context) {
+    final request = context.watch<CookieRequest>();
+
     final Size screenSize = MediaQuery.sizeOf(context);
     final double iconSize = _getIconSize(screenSize);
     final double fontSize = _getFontSize(screenSize);
 
-		return Material(
+    return Material(
       color: item.color,
       child: InkWell(
         // Area responsive terhadap sentuhan
         onTap: () async {
-        // Memunculkan SnackBar ketika diklik
-        ScaffoldMessenger.of(context)
-          ..hideCurrentSnackBar()
-          ..showSnackBar(SnackBar(
-            content: Text("Kamu telah menekan tombol ${item.name}!")));
-        if (item.name == "Tambah Item") {
-          Navigator.push(context,
-            MaterialPageRoute(
-              settings: const RouteSettings(name: 'donate'),
-              builder: (context) => const AddItemForm(),
-            ));
-        } else if (item.name == "Lihat Item") {
-          Navigator.push(context,
-            MaterialPageRoute(
-              settings: const RouteSettings(name: 'catalogue'),
-              builder: (context) => const ItemPage(),
-            ));
-        }else if (item.name == "Borrow"){
-          Navigator.push(context,
-            MaterialPageRoute(
-              settings: const RouteSettings(name: 'borrow'),
-              builder: (context) => const BorrowPage(),
-            ));
-        } else if (item.name == "Return"){
-        Navigator.push(context,
-					MaterialPageRoute(
-              settings: const RouteSettings(name: 'return_review'),
-              builder: (context) => const BorrowedItemPage(),
-            ));
-      } else if (item.name == "Favorit") {
-            Navigator.push(context,
-              MaterialPageRoute(
-                settings: const RouteSettings(name: 'favorite'),
-                builder: (context) => const FavoritePage(),
-              ));
-        }else if (item.name == "Reviews") {
-            Navigator.push(context,
-              MaterialPageRoute(
-                settings: const RouteSettings(name: 'all_review'),
-                builder: (context) => const ReviewPage(),
-              ));
-        } else if (item.name == "Logout") {
-          final response = await request.logout(
-            // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
-            "http://127.0.0.1:8000/auth/logout/");
-          String message = response["message"];
+          // Memunculkan SnackBar ketika diklik
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(SnackBar(
+                content: Text("Kamu telah menekan tombol ${item.name}!")));
+          if (item.name == "Tambah Item") {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  settings: const RouteSettings(name: 'donate'),
+                  builder: (context) => const AddItemForm(),
+                ));
+          } else if (item.name == "Lihat Item") {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  settings: const RouteSettings(name: 'catalogue'),
+                  builder: (context) => const ItemPage(),
+                ));
+          } else if (item.name == "Borrow") {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  settings: const RouteSettings(name: 'borrow'),
+                  builder: (context) => const BorrowPage(),
+                ));
+          } else if (item.name == "Return") {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  settings: const RouteSettings(name: 'return_review'),
+                  builder: (context) => const BorrowedItemPage(),
+                ));
+          } else if (item.name == "Favorit") {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  settings: const RouteSettings(name: 'favorite'),
+                  builder: (context) => const FavoritePage(),
+                ));
+          } else if (item.name == "Reviews") {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  settings: const RouteSettings(name: 'all_review'),
+                  builder: (context) => const ReviewPage(),
+                ));
+          } else if (item.name == "Logout") {
+            final response = await request.logout(
+                // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
+                "https://sibook-d08-tk.pbp.cs.ui.ac.id/auth/logout/");
+            String message = response["message"];
 
-          if (!context.mounted) {
-            return;
-          }
+            if (!context.mounted) {
+              return;
+            }
 
-          if (response['status']) {
-            String uname = response["username"];
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text("$message Sampai jumpa, $uname."),
-            ));
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const LoginPage()),
-            );
-          } else {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text(message),
-            ));
+            if (response['status']) {
+              String uname = response["username"];
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text("$message Sampai jumpa, $uname."),
+              ));
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const LoginPage()),
+              );
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(message),
+              ));
+            }
           }
-        }
         },
         child: Column(
           // crossAxisAlignment: CrossAxisAlignment.center,
@@ -146,8 +152,7 @@ class ShopCard extends StatelessWidget {
             ),
           ],
         ),
-
       ),
-		);
-	}
+    );
+  }
 }

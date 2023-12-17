@@ -19,10 +19,11 @@ class ReviewPage extends StatefulWidget {
 
 class _ReviewPageState extends State<ReviewPage> {
   //Store reviews
-  Map<Product,Review> userReviews={}; 
+  Map<Product, Review> userReviews = {};
 
   Future<Product> fetchBook(int id) async {
-    var url = Uri.parse('http://127.0.0.1:8000/borrow/get-book-data/${id}');
+    var url = Uri.parse(
+        'https://sibook-d08-tk.pbp.cs.ui.ac.id/borrow/get-book-data/${id}');
     var response =
         await http.get(url, headers: {"Content-Type": "application/json"});
 
@@ -36,38 +37,40 @@ class _ReviewPageState extends State<ReviewPage> {
     }
   }
 
-  Future<String> fetchUser(int idx) async{
-    var url= Uri.parse('http://127.0.0.1:8000/returnBook/get-user-data/${idx}');
+  Future<String> fetchUser(int idx) async {
+    var url = Uri.parse(
+        'https://sibook-d08-tk.pbp.cs.ui.ac.id/returnBook/get-user-data/${idx}');
     var response =
         await http.get(url, headers: {"Content-Type": "application/json"});
-    
-    if(response.statusCode==200){
+
+    if (response.statusCode == 200) {
       var data = json.decode(utf8.decode(response.bodyBytes));
-      List<String> temp=data[0].toString().split(",");
-      return temp[5].replaceAll("username: ","");
-    }else{
+      List<String> temp = data[0].toString().split(",");
+      return temp[5].replaceAll("username: ", "");
+    } else {
       throw Exception(
           'Failed to load book. Status code: ${response.statusCode}');
     }
   }
 
-  Future<Map<Product,Review>> fetchBorrowed() async {
+  Future<Map<Product, Review>> fetchBorrowed() async {
     CookieRequest request = Provider.of<CookieRequest>(context, listen: false);
 
     // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
 
-    var response = await request.get('http://127.0.0.1:8000/returnBook/user-reviews/get-reviews-experimental/');
+    var response = await request.get(
+        'https://sibook-d08-tk.pbp.cs.ui.ac.id/returnBook/user-reviews/get-reviews-experimental/');
 
     // melakukan konversi data json menjadi object Item
-    Map<Product,Review> allReviews = {};
+    Map<Product, Review> allReviews = {};
 
     if (response != null) {
       for (var d in response) {
         if (d != null) {
           int bookId = Review.fromJson(d).fields.book;
           Product buku = await fetchBook(bookId);
-          Review tempReview=Review.fromJson(d);
-          allReviews.addAll({buku:tempReview});
+          Review tempReview = Review.fromJson(d);
+          allReviews.addAll({buku: tempReview});
         }
       }
     }
@@ -83,7 +86,8 @@ class _ReviewPageState extends State<ReviewPage> {
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         } else {
-          return Text('✾ From: ${snapshot.data}',
+          return Text(
+            '✾ From: ${snapshot.data}',
             style: const TextStyle(
               color: Colors.white,
             ),
@@ -119,7 +123,6 @@ class _ReviewPageState extends State<ReviewPage> {
                     return ListView.builder(
                       itemCount: userReviews.length,
                       itemBuilder: (_, index) => Container(
-                        
                         child: Container(
                           color: Color.fromARGB(255, 2, 57, 101),
                           margin: const EdgeInsets.symmetric(
@@ -137,12 +140,20 @@ class _ReviewPageState extends State<ReviewPage> {
                                   color: Color.fromARGB(255, 255, 160, 234),
                                 ),
                               ),
-                              buildUsernameFuture(userReviews.values.elementAt(index).fields.user),
+                              buildUsernameFuture(userReviews.values
+                                  .elementAt(index)
+                                  .fields
+                                  .user),
                               const SizedBox(height: 10),
-                              Text(userReviews.values.elementAt(index).fields.review,
-                              style: const TextStyle(
-                                  color : Colors.white,
-                                ),),
+                              Text(
+                                userReviews.values
+                                    .elementAt(index)
+                                    .fields
+                                    .review,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
                             ],
                           ),
                         ),

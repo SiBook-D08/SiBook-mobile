@@ -25,7 +25,8 @@ class _BorrowPageState extends State<BorrowPage> {
   List<Product> allCart = []; // List to hold filtered items
   Future<List<Product>> fetchItem() async {
     // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
-    var url = Uri.parse('http://127.0.0.1:8000/borrow/get-books/');
+    var url =
+        Uri.parse('https://sibook-d08-tk.pbp.cs.ui.ac.id/borrow/get-books/');
     var response = await http.get(
       url,
       headers: {"Content-Type": "application/json"},
@@ -44,7 +45,8 @@ class _BorrowPageState extends State<BorrowPage> {
   }
 
   Future<Product> fetchBookById(int id) async {
-    var url = Uri.parse('http://localhost:8000/borrow/get-book-data/$id');
+    var url = Uri.parse(
+        'https://sibook-d08-tk.pbp.cs.ui.ac.id/borrow/get-book-data/$id');
     var response =
         await http.get(url, headers: {"Content-Type": "application/json"});
 
@@ -63,7 +65,8 @@ class _BorrowPageState extends State<BorrowPage> {
 
     // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
 
-    var response = await request.get('http://127.0.0.1:8000/borrow/get-cart/');
+    var response = await request
+        .get('https://sibook-d08-tk.pbp.cs.ui.ac.id/borrow/get-cart/');
 
     // melakukan konversi data json menjadi object Item
     List<Product> listCart = [];
@@ -99,7 +102,7 @@ class _BorrowPageState extends State<BorrowPage> {
                 hintText: 'Search for items...',
                 prefixIcon: const Icon(Icons.search),
                 labelStyle: TextStyle(color: Colors.white),
-                hintStyle:TextStyle(color: Colors.white) ,
+                hintStyle: TextStyle(color: Colors.white),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
@@ -146,7 +149,7 @@ class _BorrowPageState extends State<BorrowPage> {
                               itemCount: itemsToShow.length,
                               itemBuilder: (_, index) => InkWell(
                                 child: Container(
-                                  color:const Color.fromARGB(255, 2, 57, 101),
+                                  color: const Color.fromARGB(255, 2, 57, 101),
                                   margin: const EdgeInsets.symmetric(
                                     horizontal: 16,
                                     vertical: 8,
@@ -163,7 +166,7 @@ class _BorrowPageState extends State<BorrowPage> {
                                         style: const TextStyle(
                                           fontSize: 14.0,
                                           fontWeight: FontWeight.bold,
-                                          color : Colors.white,
+                                          color: Colors.white,
                                         ),
                                       ),
                                       SizedBox(height: 5),
@@ -174,7 +177,7 @@ class _BorrowPageState extends State<BorrowPage> {
                                                   context,
                                                   listen: false);
                                           final response = await request.post(
-                                              'http://localhost:8000/borrow/remove-cart-flutter/${itemsToShow[index].pk}/',
+                                              'https://sibook-d08-tk.pbp.cs.ui.ac.id/borrow/remove-cart-flutter/${itemsToShow[index].pk}/',
                                               {});
 
                                           if (response['status'] == 'success') {
@@ -213,7 +216,7 @@ class _BorrowPageState extends State<BorrowPage> {
                         final request =
                             Provider.of<CookieRequest>(context, listen: false);
                         final response = await request.post(
-                            'http://localhost:8000/borrow/add-to-list-flutter/',
+                            'https://sibook-d08-tk.pbp.cs.ui.ac.id/borrow/add-to-list-flutter/',
                             {'username': request.jsonData['username']});
 
                         if (response['status'] == 'success') {
@@ -341,7 +344,7 @@ class _BorrowPageState extends State<BorrowPage> {
                                         listen: false);
                                     print("-> ${request.jsonData.toString()}");
                                     final response = await request.post(
-                                        'http://localhost:8000/borrow/add-to-cart-flutter/${itemsToShow[index].pk}/',
+                                        'https://sibook-d08-tk.pbp.cs.ui.ac.id/borrow/add-to-cart-flutter/${itemsToShow[index].pk}/',
                                         {
                                           'username':
                                               request.jsonData['username']

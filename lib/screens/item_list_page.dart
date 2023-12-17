@@ -20,7 +20,8 @@ class _ItemPageState extends State<ItemPage> {
   List<Product> allItems = []; // List to hold all items
   List<Product> filteredItems = []; // List to hold filtered items
   Future<List<Product>> fetchItem() async {
-    var url = Uri.parse('http://127.0.0.1:8000/catalogue/get-books/');
+    var url =
+        Uri.parse('https://sibook-d08-tk.pbp.cs.ui.ac.id/catalogue/get-books/');
     var response = await http.get(
       url,
       headers: {"Content-Type": "application/json"},
@@ -40,8 +41,8 @@ class _ItemPageState extends State<ItemPage> {
 
   @override
   Widget build(BuildContext context) {
-    Color startColor = Color.fromARGB(255, 204, 207, 209); // Color to fade
-    LinearGradient existingGradient = LinearGradient(
+    Color startColor = const Color.fromARGB(255, 2, 57, 101); // Color to fade
+    LinearGradient existingGradient = const LinearGradient(
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
       colors: [
@@ -53,20 +54,19 @@ class _ItemPageState extends State<ItemPage> {
 
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: const Color.fromARGB(255, 142, 168, 125),
-          title: const Text('Item'),
+          title: const Text(
+            "List Book",
+            style: TextStyle(
+              color: Colors.black, // Change text color to black
+            ),
+          ),
+          backgroundColor: Colors.white,
+          iconTheme: const IconThemeData(color: Colors.black), // Change icon color to black
         ),
         drawer: const LeftDrawer(title: 'catalogue'),
         body: Container(
             decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    Color.fromARGB(255, 0, 11, 0),
-                    Color.fromARGB(255, 78, 117, 151),
-                    Color.fromARGB(249, 238, 203, 156)
-                  ]),
+              color: const Color.fromRGBO(3, 2, 46, 1),
             ),
             child: Column(
               children: [
@@ -76,8 +76,10 @@ class _ItemPageState extends State<ItemPage> {
                     controller: searchController,
                     decoration: InputDecoration(
                       labelText: 'Search',
-                      hintText: 'Search for items...',
+                      hintText: 'Searching book...',
                       prefixIcon: const Icon(Icons.search),
+                      labelStyle: TextStyle(color: Colors.white),
+                      hintStyle: TextStyle(color: Colors.white),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
                       ),
@@ -164,12 +166,14 @@ class _ItemPageState extends State<ItemPage> {
                                                   style: const TextStyle(
                                                     fontSize: 18.0,
                                                     fontWeight: FontWeight.bold,
+                                                    color: Color.fromARGB(255, 255, 160, 234),
                                                   ),
                                                 ),
                                                 const SizedBox(height: 10),
                                                 Text(itemsToShow[index]
                                                     .fields
-                                                    .author),
+                                                    .author,
+                                                    style: const TextStyle(color: Colors.white),),
                                                 const SizedBox(height: 10),
                                                 Text(itemsToShow[index]
                                                             .fields
@@ -179,10 +183,12 @@ class _ItemPageState extends State<ItemPage> {
                                                     ? "${itemsToShow[index].fields.description.substring(0, 201)}..."
                                                     : itemsToShow[index]
                                                         .fields
-                                                        .description),
+                                                        .description,
+                                                    style: const TextStyle(color: Colors.white),),
                                                 const SizedBox(height: 10),
                                                 Text(
-                                                    "Banyak Halaman: ${itemsToShow[index].fields.numPages}"),
+                                                    "Banyak Halaman: ${itemsToShow[index].fields.numPages}",
+                                                    style: const TextStyle(color: Colors.white),),
                                               ],
                                             ))))),
                           ),

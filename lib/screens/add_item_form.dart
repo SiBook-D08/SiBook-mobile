@@ -55,8 +55,8 @@ class _AddItemFormState extends State<AddItemForm> {
             end: Alignment.bottomRight,
             colors: [
               Color.fromARGB(255, 0, 11, 0),
-            Color.fromARGB(255, 78, 117, 151),
-            Color.fromARGB(249, 238, 203, 156),
+              Color.fromARGB(255, 78, 117, 151),
+              Color.fromARGB(249, 238, 203, 156),
             ],
           ),
         ),
@@ -76,10 +76,12 @@ class _AddItemFormState extends State<AddItemForm> {
                     ),
                     child: TextFormField(
                       controller: _titleCtrl,
-                      style: const TextStyle(color: Color.fromARGB(255, 243, 231, 231)),
+                      style: const TextStyle(
+                          color: Color.fromARGB(255, 243, 231, 231)),
                       decoration: InputDecoration(
                           // hintStyle: const TextStyle(color: Color.fromARGB(255, 243, 231, 231)),
-                          labelStyle: const TextStyle(color: Color.fromARGB(255, 243, 231, 231)),
+                          labelStyle: const TextStyle(
+                              color: Color.fromARGB(255, 243, 231, 231)),
                           // hintText: "Judul Buku",
                           labelText: "Judul Buku",
                           border: OutlineInputBorder(
@@ -101,10 +103,12 @@ class _AddItemFormState extends State<AddItemForm> {
                     ),
                     child: TextFormField(
                       controller: _authorCtrl,
-                      style: const TextStyle(color: Color.fromARGB(255, 243, 231, 231)),
+                      style: const TextStyle(
+                          color: Color.fromARGB(255, 243, 231, 231)),
                       decoration: InputDecoration(
                         // hintStyle: const TextStyle(color: Color.fromARGB(255, 243, 231, 231)),
-                        labelStyle: const TextStyle(color: Color.fromARGB(255, 243, 231, 231)),
+                        labelStyle: const TextStyle(
+                            color: Color.fromARGB(255, 243, 231, 231)),
                         // hintText: "Author Buku",
                         labelText: "Author Buku",
                         border: OutlineInputBorder(
@@ -128,10 +132,12 @@ class _AddItemFormState extends State<AddItemForm> {
                     ),
                     child: TextFormField(
                       controller: _pageCountCtrl,
-                      style: const TextStyle(color: Color.fromARGB(255, 243, 231, 231)),
+                      style: const TextStyle(
+                          color: Color.fromARGB(255, 243, 231, 231)),
                       decoration: InputDecoration(
                         // hintStyle: const TextStyle(color: Color.fromARGB(255, 243, 231, 231)),
-                        labelStyle: const TextStyle(color: Color.fromARGB(255, 243, 231, 231)),
+                        labelStyle: const TextStyle(
+                            color: Color.fromARGB(255, 243, 231, 231)),
                         // hintText: "Jumlah Halaman",
                         labelText: "Jumlah Halaman",
                         border: OutlineInputBorder(
@@ -158,10 +164,12 @@ class _AddItemFormState extends State<AddItemForm> {
                     ),
                     child: TextFormField(
                       controller: _descCtrl,
-                      style: const TextStyle(color: Color.fromARGB(255, 243, 231, 231)),
+                      style: const TextStyle(
+                          color: Color.fromARGB(255, 243, 231, 231)),
                       decoration: InputDecoration(
                         // hintStyle: const TextStyle(color: Color.fromARGB(255, 243, 231, 231)),
-                        labelStyle: const TextStyle(color: Color.fromARGB(255, 243, 231, 231)),
+                        labelStyle: const TextStyle(
+                            color: Color.fromARGB(255, 243, 231, 231)),
                         // hintText: "Deskripsi",
                         labelText: "Deskripsi",
                         border: OutlineInputBorder(
@@ -198,39 +206,42 @@ class _AddItemFormState extends State<AddItemForm> {
                           if (_formKey.currentState!.validate()) {
                             // Kirim ke Django dan tunggu respons
                             final response = await request.postJson(
-                                "http://127.0.0.1:8000/donate/create-flutter/",
+                                "https://sibook-d08-tk.pbp.cs.ui.ac.id/donate/create-flutter/",
                                 jsonEncode(<String, String>{
                                   'title': _titleCtrl.text,
                                   'author': _authorCtrl.text,
                                   'description': _descCtrl.text,
                                   'num_pages': _pageCountCtrl.text,
                                 }));
-                                
+
                             if (!context.mounted) {
                               return;
                             }
 
                             if (response['status'] == 'success') {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(const SnackBar(
-                                      content: Text("Item baru berhasil disimpan!")));
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text(
+                                          "Item baru berhasil disimpan!")));
                               Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => MyHomePage()));
                             } else if (response['status'] == 'full') {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(const SnackBar(
-                                      content: Text("Maaf, katalog buku sudah penuh.")));
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text(
+                                          "Maaf, katalog buku sudah penuh.")));
                             } else if (response['status'] == 'alrExists') {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(const SnackBar(
-                                      content:
-                                          Text("Buku dengan judul yang sama sudah ada di katalog!")));
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text(
+                                          "Buku dengan judul yang sama sudah ada di katalog!")));
                             } else {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(const SnackBar(
-                                      content: Text("Terdapat kesalahan, silakan coba lagi.")));
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text(
+                                          "Terdapat kesalahan, silakan coba lagi.")));
                             }
                           }
                         },

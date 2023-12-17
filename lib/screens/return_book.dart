@@ -10,11 +10,8 @@ import 'package:sibook_mobile/widgets/left_drawer.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 
-
-
 class BorrowedItemPage extends StatefulWidget {
   const BorrowedItemPage({Key? key}) : super(key: key);
-  
 
   @override
   // ignore: library_private_types_in_public_api
@@ -23,11 +20,12 @@ class BorrowedItemPage extends StatefulWidget {
 
 class _BorrowedItemPageState extends State<BorrowedItemPage> {
   // Define a TextEditingController for handling user input in the search bar
-  Map<int,Product> userBorrowed=HashMap(); // List all borrowed items
+  Map<int, Product> userBorrowed = HashMap(); // List all borrowed items
   final _formKey = GlobalKey<FormState>();
 
   Future<Product> fetchBook(int id) async {
-    var url = Uri.parse('http://127.0.0.1:8000/borrow/get-book-data/${id}');
+    var url = Uri.parse(
+        'https://sibook-d08-tk.pbp.cs.ui.ac.id/borrow/get-book-data/${id}');
     var response =
         await http.get(url, headers: {"Content-Type": "application/json"});
 
@@ -41,22 +39,23 @@ class _BorrowedItemPageState extends State<BorrowedItemPage> {
     }
   }
 
-  Future<Map<int,Product>> fetchBorrowed() async {
+  Future<Map<int, Product>> fetchBorrowed() async {
     CookieRequest request = Provider.of<CookieRequest>(context, listen: false);
 
     // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
 
-    var response = await request.get('http://127.0.0.1:8000/returnBook/get-books-borrowed/');
+    var response = await request.get(
+        'https://sibook-d08-tk.pbp.cs.ui.ac.id/returnBook/get-books-borrowed/');
 
     // melakukan konversi data json menjadi object Item
-    Map<int,Product> allBorrowed = {};
+    Map<int, Product> allBorrowed = {};
 
     if (response != null) {
       for (var d in response) {
         if (d != null) {
           int bookId = Loan.fromJson(d).fields.book;
           Product buku = await fetchBook(bookId);
-          allBorrowed.addAll({bookId:buku});
+          allBorrowed.addAll({bookId: buku});
         }
       }
     }
@@ -64,114 +63,114 @@ class _BorrowedItemPageState extends State<BorrowedItemPage> {
   }
 
   //PopUp MODAL for Return Review
-  Future<void> _dialogBuilder(BuildContext context,int inpBookId, String bookTitle) {
-    print("Meow=> "+inpBookId.toString()+" ");
+  Future<void> _dialogBuilder(
+      BuildContext context, int inpBookId, String bookTitle) {
+    print("Meow=> " + inpBookId.toString() + " ");
     final request = Provider.of<CookieRequest>(context, listen: false);
-    final TextEditingController _reviewDescription = TextEditingController();;
+    final TextEditingController _reviewDescription = TextEditingController();
+    ;
     String bT = bookTitle ?? "";
     int _userID;
-    int _bookID=inpBookId;
-
+    int _bookID = inpBookId;
 
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title:  Text("""Return $bT ?"""),
+          title: Text("""Return $bT ?"""),
           content: Form(
             key: _formKey,
-            child:SingleChildScrollView(
-              child: Column(crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(24.0),
-                    child: TextFormField(
-                      controller: _reviewDescription,
-                      decoration: InputDecoration(
-                        hintText: "Write what you think about this book",
-                        labelText: "Review (Optional)",
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5.0),
+            child: SingleChildScrollView(
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(24.0),
+                      child: TextFormField(
+                        controller: _reviewDescription,
+                        decoration: InputDecoration(
+                          hintText: "Write what you think about this book",
+                          labelText: "Review (Optional)",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5.0),
+                          ),
                         ),
+                        validator: (String? value) {
+                          return null;
+                        },
                       ),
-                      validator: (String? value) {
-                        return null;
-                      },
                     ),
-                  ),
-                  ]
-            ) 
-          ,),),
+                  ]),
+            ),
+          ),
           actions: <Widget>[
             TextButton(
-              style: TextButton.styleFrom(
-                textStyle: Theme.of(context).textTheme.labelLarge,
-              ),
-              child: const Text('Close'),
-              onPressed:  () async {Navigator.of(context).pop();}),
+                style: TextButton.styleFrom(
+                  textStyle: Theme.of(context).textTheme.labelLarge,
+                ),
+                child: const Text('Close'),
+                onPressed: () async {
+                  Navigator.of(context).pop();
+                }),
             TextButton(
               style: TextButton.styleFrom(
                 textStyle: Theme.of(context).textTheme.labelLarge,
               ),
               child: const Text('Return Book'),
-              onPressed:  () async {
-                
+              onPressed: () async {
                 if (_formKey.currentState!.validate()) {
-                  print("Meow2=> "+_reviewDescription.text);
+                  print("Meow2=> " + _reviewDescription.text);
                   // Kirim ke Django dan tunggu respons
                   // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
 
-                  if(_reviewDescription.text.isNotEmpty){
-                  final response = await request.postJson(
-                  "http://127.0.0.1:8000/returnBook/create-review-flutter/$_bookID/",
-                  jsonEncode(<String, String>{
-                      'book': _bookID.toString(),
-                      'review': _reviewDescription.text,
-                  }));
-                        if (response['status'] == 'success') {
-                            _reviewDescription.dispose();
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                            content: Text("Buku Berhasil dibalikan dan review and telah diterima"),
-                            ));
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(builder: (context) => BorrowedItemPage()),
-                            );
-                          }else {
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                                content:
-                                    Text("Terdapat kesalahan review, silakan coba lagi."),
-                            ));
-                        }
-                        _reviewDescription.dispose();
-
-                  }else{
+                  if (_reviewDescription.text.isNotEmpty) {
                     final response = await request.postJson(
-                      "http://127.0.0.1:8000/returnBook/just-return-book/$_bookID/",
-                      jsonEncode(<String, String>{
-                      'book': _bookID.toString()}
-                      //Continue
-                      ));
-                    if (response['message'] == 'Book returned successfully.') {
+                        "https://sibook-d08-tk.pbp.cs.ui.ac.id/returnBook/create-review-flutter/$_bookID/",
+                        jsonEncode(<String, String>{
+                          'book': _bookID.toString(),
+                          'review': _reviewDescription.text,
+                        }));
+                    if (response['status'] == 'success') {
                       _reviewDescription.dispose();
-                      ScaffoldMessenger.of(context)
-                          .showSnackBar(const SnackBar(
-                      content: Text("Buku berhasil dibalikan"),
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text(
+                            "Buku Berhasil dibalikan dan review and telah diterima"),
                       ));
                       Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) => BorrowedItemPage()),
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => BorrowedItemPage()),
                       );
-                    }else {
-                      ScaffoldMessenger.of(context)
-                          .showSnackBar(const SnackBar(
-                          content:
-                              Text("Terdapat kesalahan balikan buku, silakan coba lagi."),
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text(
+                            "Terdapat kesalahan review, silakan coba lagi."),
                       ));
-                  }
-                  _reviewDescription.dispose();
+                    }
+                    _reviewDescription.dispose();
+                  } else {
+                    final response = await request.postJson(
+                        "https://sibook-d08-tk.pbp.cs.ui.ac.id/returnBook/just-return-book/$_bookID/",
+                        jsonEncode(<String, String>{'book': _bookID.toString()}
+                            //Continue
+                            ));
+                    if (response['message'] == 'Book returned successfully.') {
+                      _reviewDescription.dispose();
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text("Buku berhasil dibalikan"),
+                      ));
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => BorrowedItemPage()),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text(
+                            "Terdapat kesalahan balikan buku, silakan coba lagi."),
+                      ));
+                    }
+                    _reviewDescription.dispose();
                   }
                 }
 
@@ -210,7 +209,6 @@ class _BorrowedItemPageState extends State<BorrowedItemPage> {
                     return ListView.builder(
                       itemCount: userBorrowed.length,
                       itemBuilder: (_, index) => Container(
-                        
                         child: Container(
                           color: Color.fromARGB(255, 2, 57, 101),
                           margin: const EdgeInsets.symmetric(
@@ -229,42 +227,50 @@ class _BorrowedItemPageState extends State<BorrowedItemPage> {
                                 ),
                               ),
                               const SizedBox(height: 10),
-                              Text("Id: ${userBorrowed.keys.elementAt(index)}",
-                              style: const TextStyle(
-                                  color : Colors.white,
-                                ),),
-                              const SizedBox(height: 10),
-                              Text("Penulis: ${userBorrowed.values.elementAt(index).fields.author}",
-                              style: const TextStyle(
-                                  color : Colors.white,
-                                ),),
+                              Text(
+                                "Id: ${userBorrowed.keys.elementAt(index)}",
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
                               const SizedBox(height: 10),
                               Text(
-                                  "Banyak Halaman: ${userBorrowed.values.elementAt(index).fields.numPages}",
-                                  style: const TextStyle(
-                                  color : Colors.white,
-                                ),),
-                                Align(
-                                  alignment: Alignment.bottomCenter,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-
-                                    child: ElevatedButton(
-
-                                      style: ButtonStyle(
+                                "Penulis: ${userBorrowed.values.elementAt(index).fields.author}",
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              Text(
+                                "Banyak Halaman: ${userBorrowed.values.elementAt(index).fields.numPages}",
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                              Align(
+                                alignment: Alignment.bottomCenter,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: ElevatedButton(
+                                    style: ButtonStyle(
                                       backgroundColor:
-                                      MaterialStateProperty.all(const Color(0xFF6C5B7B)),
-                                      ),
-                                      
-                                      onPressed: () => _dialogBuilder(context,userBorrowed.keys.elementAt(index),userBorrowed.values.elementAt(index).fields.title),
-
-                                      child: const Text(
+                                          MaterialStateProperty.all(
+                                              const Color(0xFF6C5B7B)),
+                                    ),
+                                    onPressed: () => _dialogBuilder(
+                                        context,
+                                        userBorrowed.keys.elementAt(index),
+                                        userBorrowed.values
+                                            .elementAt(index)
+                                            .fields
+                                            .title),
+                                    child: const Text(
                                       "Return Book",
                                       style: TextStyle(color: Colors.white),
-                                      ),
                                     ),
                                   ),
-                                  ),
+                                ),
+                              ),
                             ],
                           ),
                         ),

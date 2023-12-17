@@ -26,7 +26,8 @@ class _FavoritePageState extends State<FavoritePage> {
   Map<Product, Favorite> favoritedBooks = {};
 
   Future<List<Product>> fetchNonFavorited() async {
-    var url = Uri.parse('http://127.0.0.1:8000/favorite/get-books/');
+    var url =
+        Uri.parse('https://sibook-d08-tk.pbp.cs.ui.ac.id/favorite/get-books/');
     var response = await http.get(
       url,
       headers: {"Content-Type": "application/json"},
@@ -45,8 +46,8 @@ class _FavoritePageState extends State<FavoritePage> {
   }
 
   Future<Map<Product, Favorite>> fetchFavorited() async {
-    var url =
-        Uri.parse('http://127.0.0.1:8000/favorite/get-favorited-flutter/');
+    var url = Uri.parse(
+        'https://sibook-d08-tk.pbp.cs.ui.ac.id/favorite/get-favorited-flutter/');
     var response = await http.get(
       url,
       headers: {"Content-Type": "application/json"},
@@ -69,7 +70,8 @@ class _FavoritePageState extends State<FavoritePage> {
   }
 
   Future<Product> fetchBookById(int id) async {
-    var url = Uri.parse('http://localhost:8000/favorite/get-book-data/$id');
+    var url = Uri.parse(
+        'https://sibook-d08-tk.pbp.cs.ui.ac.id/favorite/get-book-data/$id');
     var response =
         await http.get(url, headers: {"Content-Type": "application/json"});
 
@@ -193,7 +195,7 @@ class _FavoritePageState extends State<FavoritePage> {
                                             onPressed: () async {
                                               final response =
                                                   await request.postJson(
-                                                'http://localhost:8000/favorite/remove-from-favorited-flutter/${favoritedBooks.values.elementAt(index).pk}/',
+                                                'https://sibook-d08-tk.pbp.cs.ui.ac.id/favorite/remove-from-favorited-flutter/${favoritedBooks.values.elementAt(index).pk}/',
                                                 jsonEncode(<String, String>{
                                                   'bookId': favoritedBooks.keys
                                                       .elementAt(index)
@@ -352,7 +354,7 @@ class _FavoritePageState extends State<FavoritePage> {
                                                               // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
                                                               final response = await request
                                                                   .postJson(
-                                                                      "http://127.0.0.1:8000/favorite/add-to-favorited-flutter/${itemsToShow[index].pk}/",
+                                                                      "https://sibook-d08-tk.pbp.cs.ui.ac.id/favorite/add-to-favorited-flutter/${itemsToShow[index].pk}/",
                                                                       jsonEncode(<String,
                                                                           String>{
                                                                         'alasan':

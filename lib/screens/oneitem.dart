@@ -24,10 +24,16 @@ class _ItemDetailPageState extends State<ItemDetailPage> {
     final request = context.watch<CookieRequest>();
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.item.fields.title),
-        backgroundColor: Colors.orange.shade800,
-        foregroundColor: Colors.white,
+        title: Text(
+          widget.item.fields.title,
+          style: const TextStyle(
+            color: Colors.black, // Change text color to black
+          ),
+        ),
+        backgroundColor: Colors.white,
+        iconTheme: const IconThemeData(color: Colors.black), // Change icon color to black
       ),
+      backgroundColor: const Color.fromRGBO(3, 2, 46, 1),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
@@ -36,12 +42,13 @@ class _ItemDetailPageState extends State<ItemDetailPage> {
             children: [
               Text(
                 'Name: ${widget.item.fields.title}',
-                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, 
+                    color: Color.fromARGB(255, 255, 160, 234),),    
               ),
               const SizedBox(height: 10),
-              Text('Description: ${widget.item.fields.description}'),
-              const SizedBox(height: 10),
-              Text('Description: ${widget.item.fields.imgUrl}'),
+              Text('Description: ${widget.item.fields.description}',
+                  style: const TextStyle(color: Colors.white)),
               // Displaying the image using Image.network
               const SizedBox(height: 10),
               Padding(
@@ -53,10 +60,13 @@ class _ItemDetailPageState extends State<ItemDetailPage> {
                       Expanded(
                         child: TextField(
                           controller: descController,
+                          style: const TextStyle(color: Color.fromARGB(255, 243, 231, 231)),
                           decoration: InputDecoration(
                             labelText: 'Edit',
-                            hintText: 'Edit current item...',
-                            prefixIcon: const Icon(Icons.search),
+                            hintText: 'Edit current book...',
+                            prefixIcon: const Icon(Icons.edit),
+                            labelStyle: TextStyle(color: Colors.white),
+                            hintStyle: TextStyle(color: Colors.white),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
                             ),
@@ -69,30 +79,37 @@ class _ItemDetailPageState extends State<ItemDetailPage> {
                           },
                         ),
                       ),
-                      const SizedBox(width: 10), // Add space between TextField and button
+                      const SizedBox(
+                          width: 10), // Add space between TextField and button
                       ElevatedButton(
                         onPressed: () async {
                           // Implement the functionality for the button press
                           // For example, confirm edit action
                           final response = await request.postJson(
-                              'http://127.0.0.1:8000/catalogue/edit-book/',
-                              convert.jsonEncode(<String, String>{
-                                'idBook': widget.item.pk.toString(),
-                                'description': newDesc,
-                              }));
+                            'https://sibook-d08-tk.pbp.cs.ui.ac.id/catalogue/edit-book/',
+                            convert.jsonEncode(<String, String>{
+                              'idBook': widget.item.pk.toString(),
+                              'description': newDesc,
+                            }),
+                          );
                           if (context.mounted && response['status'] == 'success') {
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                              content: Text(
-                                  "Account has been successfully registered!"),
-                            ));
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("Account has been successfully registered!"),
+                              ),
+                            );
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const ItemPage()),
+                                builder: (context) => const ItemPage(),
+                              ),
                             );
                           }
                         },
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(const Color(0xFF6C5B7B)),
+                          foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                        ),
                         child: const Text('Confirm'),
                       ),
                     ],
