@@ -95,7 +95,7 @@ class _FavoritePageState extends State<FavoritePage> {
           foregroundColor: Colors.white,
           backgroundColor: const Color.fromARGB(255, 0, 0, 0),
         ),
-        drawer: const LeftDrawer(title: 'Favorit'),
+        drawer: const LeftDrawer(title: 'favorite'),
         body: Column(
           children: [
             Padding(
