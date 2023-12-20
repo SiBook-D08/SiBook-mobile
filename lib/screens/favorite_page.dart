@@ -46,24 +46,19 @@ class _FavoritePageState extends State<FavoritePage> {
   }
 
   Future<Map<Product, Favorite>> fetchFavorited() async {
-    var url = Uri.parse(
-        'https://sibook-d08-tk.pbp.cs.ui.ac.id/favorite/get-favorited-flutter/');
-    var response = await http.get(
-      url,
-      headers: {"Content-Type": "application/json"},
-    );
-    var data = jsonDecode(utf8.decode(response.bodyBytes));
+    final request = context.watch<CookieRequest>();
 
+    final response = await request.get(
+        'https://sibook-d08-tk.pbp.cs.ui.ac.id/favorite/get-favorited-flutter/');
     Map<Product, Favorite> allFavorited = {};
-    if (data != null) {
-      for (var d in data) {
-        if (d != null) {
-          int bookId = Favorite.fromJson(d).fields.book;
-          Product bookData =
-              await fetchBookById(bookId); // get book data based on the id
-          Favorite tmpFavorite = Favorite.fromJson(d);
-          allFavorited.addAll({bookData: tmpFavorite});
-        }
+
+    for (var d in response) {
+      if (d != null) {
+        int bookId = Favorite.fromJson(d).fields.book;
+        Product bookData =
+            await fetchBookById(bookId); // get book data based on the id
+        Favorite tmpFavorite = Favorite.fromJson(d);
+        allFavorited.addAll({bookData: tmpFavorite});
       }
     }
 
