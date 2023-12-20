@@ -1,5 +1,5 @@
 import 'package:sibook_mobile/models/product.dart';
-import 'package:sibook_mobile/models/favorite.dart';
+import 'package:sibook_mobile/models/Favorite.dart';
 import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
 import 'package:http/http.dart' as http;
@@ -59,7 +59,8 @@ class _FavoritePageState extends State<FavoritePage> {
       for (var d in data) {
         if (d != null) {
           int bookId = Favorite.fromJson(d).fields.book;
-          Product bookData = await fetchBookById(bookId);
+          Product bookData =
+              await fetchBookById(bookId); // get book data based on the id
           Favorite tmpFavorite = Favorite.fromJson(d);
           allFavorited.addAll({bookData: tmpFavorite});
         }
