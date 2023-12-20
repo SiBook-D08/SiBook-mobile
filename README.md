@@ -1,3 +1,5 @@
+[![Build status](https://build.appcenter.ms/v0.1/apps/406058d9-dfe8-4d69-881f-f57ecdf9955c/branches/main/badge)](https://appcenter.ms)
+
 # SiBook 📚📗
 ## Deskripsi Singkat
 Sebuah platform yang dirancang dengan tujuan untuk meningkatkan tingkat literasi di Indonesia. Situs web ini memungkinkan pengguna untuk mencari buku yang mereka inginkan dan meminjam buku secara online. Selain itu, situs ini memberikan kemudahan dalam melacak riwayat peminjaman dan pengembalian buku, serta memberikan pengguna kesempatan untuk memberikan ulasan saat mengembalikan buku. Fitur tambahan yang tersedia adalah kemampuan untuk memfavoritkan buku dari daftar buku yang ada.
@@ -48,3 +50,6 @@ Untuk memulai aplikasi, dapat dilakukan command `git clone` pada terminal, kemud
 
 ## Berita Acara
 Dapat diakses melalui spreadsheet [berita acara](https://docs.google.com/spreadsheets/d/1ZFUkqwQGc-nZMWq-vbccy1NEYtcODBSn/edit#gid=842285077).
+
+## Tautan APK
+APK SiBook Mobile dapat diakses melalui Microsoft App Center [SiBook Mobile](https://install.appcenter.ms/orgs/sibook/apps/sibook-mobile/distribution_groups/public)
