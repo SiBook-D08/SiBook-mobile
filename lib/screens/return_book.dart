@@ -147,7 +147,6 @@ class _BorrowedItemPageState extends State<BorrowedItemPage> {
                             "Terdapat kesalahan review, silakan coba lagi."),
                       ));
                     }
-                    _reviewDescription.dispose();
                   } else {
                     final response = await request.postJson(
                         "https://sibook-d08-tk.pbp.cs.ui.ac.id/returnBook/just-return-book/$_bookID/",
@@ -170,11 +169,12 @@ class _BorrowedItemPageState extends State<BorrowedItemPage> {
                             "Terdapat kesalahan balikan buku, silakan coba lagi."),
                       ));
                     }
-                    _reviewDescription.dispose();
                   }
                 }
-
-                Navigator.of(context).pop();
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => BorrowedItemPage()),
+                );
               },
             )
           ],
