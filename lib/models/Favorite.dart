@@ -57,5 +57,3 @@ class Fields {
         "alasan": alasan,
       };
 }
-
-// just a change to push
